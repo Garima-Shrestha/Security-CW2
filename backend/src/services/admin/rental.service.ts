@@ -2,6 +2,7 @@ import { RentalRepository } from "../../repositories/rental.repository";
 import { ProcessReturnDto } from "../../dtos/rental.dto";
 import { HttpError } from "../../errors/http-error";
 import { logActivity, logSecurityEvent } from "../../config/logger";
+import { sanitizeText } from "../../utils/sanitize"; 
 
 const rentalRepo = new RentalRepository();
 
@@ -45,7 +46,7 @@ export class RentalAdminService {
             status: "completed",
             returnedAt: new Date(),
             deductionAmount: data.deductionAmount,
-            deductionReason: data.deductionReason,
+            deductionReason: data.deductionReason ? sanitizeText(data.deductionReason) : undefined,
             depositRefunded: true,
         });
 

@@ -14,6 +14,7 @@ export class EquipmentService {
             description: sanitizeRichText(data.description),
             brand: sanitizeText(data.brand),
             model: sanitizeText(data.model),
+            specs: sanitizeSpecs(data.specs),
             images,
         } as any);
 
@@ -30,6 +31,7 @@ export class EquipmentService {
         if (data.description) updates.description = sanitizeRichText(data.description);
         if (data.brand) updates.brand = sanitizeText(data.brand);
         if (data.model) updates.model = sanitizeText(data.model);
+        if (data.specs) updates.specs = sanitizeSpecs(data.specs);
 
         const updated = await equipmentRepository.updateOneEquipment(id, updates);
         logActivity("EQUIPMENT_UPDATED", { adminId, equipmentId: id });
@@ -69,4 +71,16 @@ export class EquipmentService {
             },
         };
     }
+}
+
+function sanitizeSpecs(specs?: Record<string, string>): Record<string, string> | undefined {
+    if (!specs) return undefined;
+    const clean: Record<string, string> = {};
+    for (const [key, value] of Object.entries(specs)) {
+        // Keys are predefined, but we still sanitize request data just in case.
+        const cleanKey = sanitizeText(key).slice(0, 50);
+        const cleanValue = sanitizeText(value).slice(0, 200);
+        if (cleanKey) clean[cleanKey] = cleanValue;
+    }
+    return clean;
 }
