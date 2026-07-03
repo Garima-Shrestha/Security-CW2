@@ -12,6 +12,8 @@ import hpp from "hpp";
 import passport from "./config/passport";
 import { SESSION_SECRET, NODE_ENV, CLIENT_URL } from "./config";
 import { generalRateLimiter } from "./middlewares/rate-limit.middleware";
+import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrf.middleware";
+import { logger } from "./config/logger";
 
 import authRoutes from "./routes/auth.route";
 
@@ -32,14 +34,13 @@ app.use(
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cookieParser());
 
-// strips out $ and . operators from req.body/query/params so they can't be used
-// to inject mongo operators (eg { "email": { "$ne": null } })
+// Removes $ and . from requests so MongoDB operators can’t be injected
 app.use(mongoSanitize());
 
 // blocks http parameter pollution, eg ?role=user&role=admin resolving to an array
 app.use(hpp());
 
-// only needed for the brief moment during the google oauth handshake, not used elsewhere
+// Only used briefly during Google OAuth login, not needed anywhere else
 app.use(
     session({
         secret: SESSION_SECRET,
@@ -60,11 +61,25 @@ app.use(generalRateLimiter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+// Generates a CSRF token, frontend sends it back in X-CSRF-Token header
+app.get("/api/csrf-token", (req, res) => {
+    const token = generateCsrfToken(req, res);
+    res.json({ csrfToken: token });
+});
+
+// Enables CSRF protection for state changing routes, skipped for pure JWT API calls
+// OAuth flow uses cookies so it must be protected
+app.use("/api/auth/google", doubleCsrfProtection);
+
 app.use("/api/auth", authRoutes);
 
-// catch-all error handler, last resort if something throws outside a controller's try/catch
+// Final error handler that catches anything not handled in controllers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
+    if (err.code === "EBADCSRFTOKEN" || err.message === "invalid csrf token") {
+        logger.warn("CSRF token validation failed", { path: req.path, ip: req.ip });
+        return res.status(403).json({ success: false, message: "Invalid or missing CSRF token" });
+    }
+    logger.error(err.message, { stack: err.stack, path: req.path });
     res.status(err.statusCode || 500).json({
         success: false,
         message: NODE_ENV === "production" ? "Internal Server Error" : err.message,
