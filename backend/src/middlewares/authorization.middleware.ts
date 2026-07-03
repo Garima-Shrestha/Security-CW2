@@ -3,6 +3,8 @@ import { JWT_SECRET } from "../config";
 import { Request, Response, NextFunction } from "express";
 import { HttpError } from "../errors/http-error";
 import { UserRepository } from "../repositories/user.repository";
+import { hashUserAgent } from "../utils/device";
+import { logSecurityEvent } from "../config/logger";
 
 let userRepository = new UserRepository();
 
@@ -24,6 +26,12 @@ export const authorizedMiddleware = async (req: Request, res: Response, next: Ne
 
         if (decoded.stage !== "full") {
             throw new HttpError(401, "MFA verification not completed");
+        }
+
+        const currentUaHash = hashUserAgent(req.headers["user-agent"]);
+        if (decoded.ua && decoded.ua !== currentUaHash) {
+            logSecurityEvent("SESSION_DEVICE_MISMATCH", { userId: decoded.id, ip: req.ip });
+            throw new HttpError(401, "Session invalid for this device, please log in again");
         }
 
         const user = await userRepository.getUserById(decoded.id);

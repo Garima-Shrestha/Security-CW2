@@ -8,14 +8,8 @@ import { logActivity, logSecurityEvent } from "../config/logger";
 import { sanitizeText } from "../utils/sanitize";
 import { sendEmail } from "../config/email";
 import { RESET_TOKEN_EXPIRY, CLIENT_URL } from "../config";
-import {
-    JWT_SECRET,
-    JWT_EXPIRY,
-    PRE_AUTH_TOKEN_EXPIRY,
-    MAX_FAILED_ATTEMPTS,
-    LOCKOUT_DURATION_MINUTES,
-    PASSWORD_HISTORY_LIMIT,
-} from "../config";
+import { JWT_SECRET, JWT_EXPIRY, PRE_AUTH_TOKEN_EXPIRY, MAX_FAILED_ATTEMPTS, LOCKOUT_DURATION_MINUTES, PASSWORD_HISTORY_LIMIT,} from "../config";
+import { hashUserAgent } from "../utils/device"; 
 
 let userRepository = new UserRepository();
 let totpService = new TotpService();
@@ -50,7 +44,7 @@ export class AuthService {
     }
 
     //  verify password, check lockout, issue pre-auth token 
-    async loginStepOne(data: LoginUserDto) {
+    async loginStepOne(data: LoginUserDto, userAgent?: string) {
         const user = await userRepository.getUserByEmail(data.email, true); // withSecrets
 
         // Return the same error for invalid email or password to avoid revealing which one failed.
@@ -86,7 +80,7 @@ export class AuthService {
 
         // If TOTP is not enabled, log the user in and prompt MFA setup
         if (!user.isTotpEnabled) {
-            const token = this.issueAccessToken(user._id.toString(), user.email, user.role);
+            const token = this.issueAccessToken(user._id.toString(), user.email, user.role, hashUserAgent(userAgent));
             return { requiresTotp: false as const, token, user };
         }
 
@@ -101,7 +95,7 @@ export class AuthService {
     }
 
     // verify TOTP code against pre-auth token 
-    async loginStepTwo(preAuthToken: string, code: string) {
+    async loginStepTwo(preAuthToken: string, code: string, userAgent?: string) {
         let decoded: any;
         try {
             decoded = jwt.verify(preAuthToken, JWT_SECRET);
@@ -123,7 +117,7 @@ export class AuthService {
             throw new HttpError(401, "Invalid authentication code");
         }
 
-        const token = this.issueAccessToken(user._id.toString(), user.email, user.role);
+        const token = this.issueAccessToken(user._id.toString(), user.email, user.role, hashUserAgent(userAgent));
         return { token, user };
     }
 
@@ -250,9 +244,9 @@ export class AuthService {
         return { message: "Password has been reset successfully" };
     }
 
-    private issueAccessToken(id: string, email: string, role: string): string {
+    private issueAccessToken(id: string, email: string, role: string, uaHash: string): string {
         return jwt.sign(
-            { id, email, role, stage: "full" },
+            { id, email, role, stage: "full", ua: uaHash },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRY as any }
         );

@@ -29,7 +29,7 @@ export class AuthController {
             if (!parsed.success) {
                 return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
             }
-            const result = await authService.loginStepOne(parsed.data);
+            const result = await authService.loginStepOne(parsed.data, req.headers["user-agent"]);
 
             if (result.requiresTotp) {
                 return res.status(200).json({ success: true, requiresTotp: true, preAuthToken: result.preAuthToken });
@@ -47,7 +47,7 @@ export class AuthController {
             if (!parsed.success) {
                 return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
             }
-            const result = await authService.loginStepTwo(parsed.data.preAuthToken, parsed.data.code);
+            const result = await authService.loginStepTwo(parsed.data.preAuthToken, parsed.data.code, req.headers["user-agent"]);
             return res.status(200).json({ success: true, token: result.token, data: result.user });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
@@ -135,7 +135,7 @@ export class AuthController {
             if (!user) {
                 return res.redirect(`${process.env.CLIENT_URL}/login?error=google_auth_failed`);
             }
-            const token = oauthService.issueTokenForUser(user._id.toString(), user.email, user.role);
+            const token = oauthService.issueTokenForUser(user._id.toString(), user.email, user.role, req.headers["user-agent"]);
             return res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
         } catch (error) {
             return res.redirect(`${process.env.CLIENT_URL}/login?error=google_auth_failed`);

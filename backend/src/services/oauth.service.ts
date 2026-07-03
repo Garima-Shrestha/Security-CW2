@@ -1,6 +1,7 @@
     import { UserRepository } from "../repositories/user.repository";
     import jwt from "jsonwebtoken";
     import { JWT_SECRET, JWT_EXPIRY } from "../config";
+    import { hashUserAgent } from "../utils/device";
 
     let userRepository = new UserRepository();
 
@@ -51,9 +52,9 @@
             return newUser;
         }
 
-        issueTokenForUser(userId: string, email: string, role: string): string {
+        issueTokenForUser(userId: string, email: string, role: string, userAgent?: string): string {
             return jwt.sign(
-                { id: userId, email, role, stage: "full" },
+                { id: userId, email, role, stage: "full", ua: hashUserAgent(userAgent) },
                 JWT_SECRET,
                 { expiresIn: JWT_EXPIRY as any }
             );
