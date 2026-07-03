@@ -4,6 +4,8 @@ import { RegisterUserDto, LoginUserDto, ChangePasswordDto } from "../dtos/user.d
 import { UserRepository } from "../repositories/user.repository";
 import { HttpError } from "../errors/http-error";
 import { TotpService } from "./totp.service";
+import { logActivity, logSecurityEvent } from "../config/logger";
+import { sanitizeText } from "../utils/sanitize";
 import {
     JWT_SECRET,
     JWT_EXPIRY,
@@ -31,7 +33,7 @@ export class AuthService {
         const hashedPassword = await bcryptjs.hash(data.password, 12);
 
         const newUser = await userRepository.createUser({
-            username: data.username,
+            username: sanitizeText(data.username),
             email: data.email,
             password: hashedPassword,
             imageUrl: data.imageUrl,
@@ -39,6 +41,8 @@ export class AuthService {
             passwordChangedAt: new Date(),
             previousPasswordHashes: [hashedPassword],
         } as any);
+
+        logActivity("USER_REGISTERED", { userId: newUser._id.toString(), email: newUser.email });
 
         return newUser;
     }
@@ -64,9 +68,11 @@ export class AuthService {
 
         if (!isPasswordValid) {
             const updated = await userRepository.incrementFailedAttempts(user._id.toString());
+            logSecurityEvent("LOGIN_FAILED", { userId: user._id.toString(), attempts: updated?.failedLoginAttempts });
             if (updated && updated.failedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
                 const lockUntil = new Date(Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000);
                 await userRepository.setLockout(user._id.toString(), lockUntil);
+                logSecurityEvent("ACCOUNT_LOCKED", { userId: user._id.toString() });
                 throw new HttpError(429, `Too many failed attempts. Account locked for ${LOCKOUT_DURATION_MINUTES} minutes.`);
             }
             throw genericError();
@@ -74,6 +80,7 @@ export class AuthService {
 
         // Clear failed attempts when password is correct
         await userRepository.resetFailedAttempts(user._id.toString());
+        logActivity("LOGIN_SUCCESS", { userId: user._id.toString() });
 
         // If TOTP is not enabled, log the user in and prompt MFA setup
         if (!user.isTotpEnabled) {
@@ -146,6 +153,7 @@ export class AuthService {
         }
 
         await userRepository.updateOneUser(userId, { isTotpEnabled: true } as any);
+        logActivity("MFA_ENABLED", { userId });
         return { message: "MFA enabled successfully" };
     }
 
@@ -174,6 +182,7 @@ export class AuthService {
             passwordChangedAt: new Date(),
         } as any);
 
+        logActivity("PASSWORD_CHANGED", { userId });
         return { message: "Password changed successfully" };
     }
 
