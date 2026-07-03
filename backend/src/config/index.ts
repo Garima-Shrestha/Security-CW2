@@ -27,6 +27,8 @@ export const PRE_AUTH_TOKEN_EXPIRY: string = process.env.PRE_AUTH_TOKEN_EXPIRY |
 
 export const CLIENT_URL: string = process.env.CLIENT_URL || 'http://localhost:3000';
 
+export const RESET_TOKEN_EXPIRY: string = process.env.RESET_TOKEN_EXPIRY || '15m';
+
 // Block login after repeated failed attempts. Brute-force lockout policy after 10-15 attempts
 export const MAX_FAILED_ATTEMPTS: number = process.env.MAX_FAILED_ATTEMPTS
     ? parseInt(process.env.MAX_FAILED_ATTEMPTS)
