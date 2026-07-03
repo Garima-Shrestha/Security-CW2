@@ -55,3 +55,20 @@ export const ChangePasswordDto = z.object({
         .regex(/[^a-zA-Z0-9]/, "Must contain a special character"),
 });
 export type ChangePasswordDto = z.infer<typeof ChangePasswordDto>;
+
+export const RequestPasswordResetDto = z.object({
+    email: z.string().email(),
+});
+export type RequestPasswordResetDto = z.infer<typeof RequestPasswordResetDto>;
+
+export const ResetPasswordDto = z.object({
+    token: z.string().min(1),
+    newPassword: z.string()
+        .min(12)
+        .max(64)
+        .regex(/[a-z]/, "Must contain a lowercase letter")
+        .regex(/[A-Z]/, "Must contain an uppercase letter")
+        .regex(/[0-9]/, "Must contain a number")
+        .regex(/[^a-zA-Z0-9]/, "Must contain a special character"),
+});
+export type ResetPasswordDto = z.infer<typeof ResetPasswordDto>;
