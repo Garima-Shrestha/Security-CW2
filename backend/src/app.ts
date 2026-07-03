@@ -16,6 +16,7 @@ import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrf.midd
 import { logger } from "./config/logger";
 
 import authRoutes from "./routes/auth.route";
+import equipmentCategoryRoutes from "./routes/equipment-category.route";
 
 dotenv.config();
 
@@ -72,6 +73,7 @@ app.get("/api/csrf-token", (req, res) => {
 app.use("/api/auth/google", doubleCsrfProtection);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/equipment-categories", equipmentCategoryRoutes);
 
 // Final error handler that catches anything not handled in controllers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
