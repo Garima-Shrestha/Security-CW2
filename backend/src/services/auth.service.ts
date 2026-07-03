@@ -6,6 +6,8 @@ import { HttpError } from "../errors/http-error";
 import { TotpService } from "./totp.service";
 import { logActivity, logSecurityEvent } from "../config/logger";
 import { sanitizeText } from "../utils/sanitize";
+import { sendEmail } from "../config/email";
+import { RESET_TOKEN_EXPIRY, CLIENT_URL } from "../config";
 import {
     JWT_SECRET,
     JWT_EXPIRY,
@@ -184,6 +186,68 @@ export class AuthService {
 
         logActivity("PASSWORD_CHANGED", { userId });
         return { message: "Password changed successfully" };
+    }
+
+    // Request password reset always return generic success so we don't leak which emails exist
+    async requestPasswordReset(email: string) {
+        const user = await userRepository.getUserByEmail(email);
+        if (!user) {
+            // doesn't reveal whether the email exists
+            return { message: "If that email is registered, a reset link has been sent." };
+        }
+
+        const resetToken = jwt.sign(
+            { id: user._id.toString(), stage: "password-reset" },
+            JWT_SECRET,
+            { expiresIn: RESET_TOKEN_EXPIRY as any }
+        );
+
+        const resetLink = `${CLIENT_URL}/reset-password?token=${resetToken}`;
+        const html = `<p>Click <a href="${resetLink}">here</a> to reset your password. This link expires in ${RESET_TOKEN_EXPIRY}.</p>`;
+
+        await sendEmail(user.email, "Password Reset Request", html);
+        logActivity("PASSWORD_RESET_REQUESTED", { userId: user._id.toString() });
+
+        return { message: "If that email is registered, a reset link has been sent." };
+    }
+
+    // Reset password using the emailed token
+    async resetPassword(token: string, newPassword: string) {
+        let decoded: any;
+        try {
+            decoded = jwt.verify(token, JWT_SECRET);
+        } catch {
+            throw new HttpError(400, "Invalid or expired reset token");
+        }
+
+        if (decoded.stage !== "password-reset") {
+            throw new HttpError(400, "Invalid reset token");
+        }
+
+        const user = await userRepository.getUserById(decoded.id, true);
+        if (!user) throw new HttpError(404, "User not found");
+
+        if (user.password) {
+            for (const oldHash of user.previousPasswordHashes || []) {
+                const matches = await bcryptjs.compare(newPassword, oldHash);
+                if (matches) {
+                    throw new HttpError(400, `New password cannot match any of your last ${PASSWORD_HISTORY_LIMIT} passwords`);
+                }
+            }
+        }
+
+        const newHash = await bcryptjs.hash(newPassword, 12);
+        const updatedHistory = [newHash, ...(user.previousPasswordHashes || [])].slice(0, PASSWORD_HISTORY_LIMIT);
+
+        await userRepository.updateOneUser(decoded.id, {
+            password: newHash,
+            previousPasswordHashes: updatedHistory,
+            passwordChangedAt: new Date(),
+            failedLoginAttempts: 0,
+        } as any);
+
+        logActivity("PASSWORD_RESET_COMPLETED", { userId: decoded.id });
+        return { message: "Password has been reset successfully" };
     }
 
     private issueAccessToken(id: string, email: string, role: string): string {

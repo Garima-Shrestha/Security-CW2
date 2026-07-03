@@ -3,6 +3,7 @@ import z from "zod";
 import { RegisterUserDto, LoginUserDto, VerifyTotpDto, EnableTotpDto, ChangePasswordDto } from "../dtos/user.dtos";
 import { AuthService } from "../services/auth.service";
 import { OAuthService } from "../services/oauth.service";
+import { RequestPasswordResetDto, ResetPasswordDto } from "../dtos/user.dtos";
 
 let authService = new AuthService();
 let oauthService = new OAuthService();
@@ -91,6 +92,32 @@ export class AuthController {
                 return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
             }
             const result = await authService.changePassword(userId.toString(), parsed.data);
+            return res.status(200).json({ success: true, message: result.message });
+        } catch (error: any) {
+            return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
+    async requestPasswordReset(req: Request, res: Response) {
+        try {
+            const parsed = RequestPasswordResetDto.safeParse(req.body);
+            if (!parsed.success) {
+                return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
+            }
+            const result = await authService.requestPasswordReset(parsed.data.email);
+            return res.status(200).json({ success: true, message: result.message });
+        } catch (error: any) {
+            return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
+    async resetPassword(req: Request, res: Response) {
+        try {
+            const parsed = ResetPasswordDto.safeParse(req.body);
+            if (!parsed.success) {
+                return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
+            }
+            const result = await authService.resetPassword(parsed.data.token, parsed.data.newPassword);
             return res.status(200).json({ success: true, message: result.message });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
