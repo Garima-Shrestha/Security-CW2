@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import z from "zod";
 import { RentalService } from "../services/rental.service";
-import { KhaltiService } from "../services/khalti.service";
+import { KhaltiRentalService } from "../services/khalti-rental.service";
 import { CreateRentalRequestDto } from "../dtos/rental.dto";
 
 let rentalService = new RentalService();
-let khaltiService = new KhaltiService();
+let khaltiRentalService = new KhaltiRentalService();
 
 export class RentalController {
     async createRental(req: Request, res: Response) {
@@ -30,7 +30,7 @@ export class RentalController {
             const userId = req.user?._id;
             if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
 
-            const data = await khaltiService.initiatePayment(userId.toString(), req.params.rentalId as string);
+            const data = await khaltiRentalService.initiatePayment(userId.toString(), req.params.rentalId as string);
             return res.status(200).json({ success: true, data, message: "Payment initiated" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
@@ -45,7 +45,7 @@ export class RentalController {
             const { pidx } = req.body;
             if (!pidx) return res.status(400).json({ success: false, message: "pidx is required" });
 
-            const data = await khaltiService.verifyPayment(userId.toString(), pidx);
+            const data = await khaltiRentalService.verifyPayment(userId.toString(), pidx);
             return res.status(200).json({ success: true, data, message: "Payment verified" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
