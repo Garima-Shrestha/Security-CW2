@@ -17,6 +17,7 @@ import { logger } from "./config/logger";
 
 import authRoutes from "./routes/auth.route";
 import equipmentCategoryRoutes from "./routes/equipment-category.route";
+import equipmentRoutes from "./routes/equipment.route";
 
 dotenv.config();
 
@@ -74,6 +75,7 @@ app.use("/api/auth/google", doubleCsrfProtection);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/equipment-categories", equipmentCategoryRoutes);
+app.use("/api/equipment", equipmentRoutes);
 
 // Final error handler that catches anything not handled in controllers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
