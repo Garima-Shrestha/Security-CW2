@@ -1,0 +1,254 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import Image from "next/image";
+import { Camera, Eye, EyeOff, Check, X, ShieldCheck, Lock, Mail, User as UserIcon } from "lucide-react";
+import api from "@/lib/axios";
+import { registerSchema, RegisterFormValues } from "@/lib/validation/auth.schema";
+import cameraImg from "@/assets/camera.png";
+
+const PASSWORD_RULES = [
+    { label: "At least 12 characters", test: (v: string) => v.length >= 12 },
+    { label: "One uppercase letter", test: (v: string) => /[A-Z]/.test(v) },
+    { label: "One lowercase letter", test: (v: string) => /[a-z]/.test(v) },
+    { label: "One number", test: (v: string) => /[0-9]/.test(v) },
+    { label: "One special character", test: (v: string) => /[^a-zA-Z0-9]/.test(v) },
+];
+
+export default function RegisterPage() {
+    const router = useRouter();
+    const [serverError, setServerError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema),
+        mode: "onChange",
+    });
+
+    const passwordValue = watch("password") || "";
+
+    async function onSubmit(values: RegisterFormValues) {
+        setServerError(null);
+        setIsSubmitting(true);
+        try {
+            await api.post("/api/auth/register", {
+                username: values.username,
+                email: values.email,
+                password: values.password,
+            });
+            router.push("/login?registered=true");
+        } catch (err: any) {
+            setServerError(err?.response?.data?.message || "Registration failed. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    return (
+        <div className="min-h-screen grid lg:grid-cols-2 bg-[#131313]">
+            {/* Left panel - branding */}
+            <div className="hidden lg:flex flex-col justify-between relative overflow-hidden">
+                <Image src={cameraImg} alt="Camera lens" fill priority className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#131313]/95 via-[#131313]/70 to-black/50" />
+
+                <div className="relative z-10 p-12 flex items-center gap-2 text-white">
+                    <Camera size={26} strokeWidth={1.5} />
+                    <span className="text-lg font-semibold tracking-tight text-[#a5c1fc]">SHUTTER</span>
+                </div>
+
+                <div className="relative z-10 p-12 space-y-4 text-white">
+                    <span className="inline-block bg-[#1e65ff] text-white text-xs font-semibold px-3 py-1 rounded-full">
+                        PROFESSIONAL GEAR
+                    </span>
+                    <h2 className="text-3xl font-semibold leading-tight max-w-sm">
+                        Create your creative kit.
+                    </h2>
+                    <p className="text-neutral-300 text-sm max-w-sm">
+                        Join the world's most elite cinematographers. Rent the tools you need to tell your story, from anywhere on earth.
+                    </p>
+                </div>
+            </div>
+
+            {/* Right panel - form */}
+            <div className="flex items-center justify-center px-6 py-12 bg-[#131313]">
+                <div className="w-full max-w-sm space-y-8">
+                    <div className="lg:hidden flex items-center gap-2 mb-4">
+                        <Camera size={24} strokeWidth={1.5} />
+                        <span className="text-lg font-semibold text-white">SHUTTER</span>
+                    </div>
+
+                    <div>
+                        <h1 className="text-3xl font-semibold text-white">Join Shutter</h1>
+                        <p className="text-[#abbad5] mt-2">Start your next production with professional precision.</p>
+                    </div>
+
+                    {serverError && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex items-start gap-2">
+                            <X size={16} className="mt-0.5 shrink-0" />
+                            <span>{serverError}</span>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+                        {/* <div>
+                            <label htmlFor="username" className="block text-sm font-medium text-[#d5c4ab] mb-1.5">
+                                Full Name
+                            </label>
+                            <div className="relative">
+                                <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9e8f78]" />
+                                <input
+                                    id="username"
+                                    type="text"
+                                    autoComplete="username"
+                                    {...register("username")}
+                                    className="w-full bg-[#251f14] border border-[#514532] text-white rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d7fe] focus:border-transparent transition placeholder:text-[#9e8f78]"
+                                    placeholder="Ram Thapa"
+                                />
+                            </div>
+                            {errors.username && <p className="text-red-600 text-xs mt-1.5">{errors.username.message}</p>}
+                        </div> */}
+
+                        <div>
+                            <label htmlFor="username" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                                Full Name
+                            </label>
+                            <div className="relative">
+                                <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <input
+                                    id="username"
+                                    type="text"
+                                    autoComplete="off"
+                                    {...register("username")}
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    placeholder="Ram Thapa"
+                                />
+                            </div>
+                            {errors.username && <p className="text-red-600 text-xs mt-1.5">{errors.username.message}</p>}
+                        </div>
+
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                                Email Address
+                            </label>
+                            <div className="relative">
+                                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <input
+                                    id="email"
+                                    type="email"
+                                    autoComplete="off"
+                                    {...register("email")}
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    placeholder="example@gmail.com"
+                                />
+                            </div>
+                            {errors.email && (
+                                <p className="text-red-600 text-xs mt-1.5">{errors.email.message}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                                Password
+                            </label>
+                            <div className="relative">
+                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    autoComplete="new-password"
+                                    {...register("password")}
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    placeholder="••••••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((s) => !s)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
+                            </div>
+
+                            {passwordValue.length > 0 && (
+                                <div className="mt-2 space-y-1">
+                                    {PASSWORD_RULES.map((rule) => {
+                                        const passed = rule.test(passwordValue);
+                                        return (
+                                            <div key={rule.label} className="flex items-center gap-1.5 text-xs">
+                                                {passed ? (
+                                                    <Check size={12} className="text-emerald-400 shrink-0" />
+                                                ) : (
+                                                    <X size={12} className="text-[#8d90a2] shrink-0" />
+                                                )}
+                                                <span className={passed ? "text-[#c3c5d9]" : "text-[#8d90a2]"}>
+                                                    {rule.label}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                                Confirm password
+                            </label>
+                            <div className="relative">
+                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <input
+                                    id="confirmPassword"
+                                    type={showConfirm ? "text" : "password"}
+                                    autoComplete="new-password"
+                                    {...register("confirmPassword")}
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    placeholder="••••••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirm((s) => !s)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                    tabIndex={-1}
+                                >
+                                    {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
+                            </div>
+                            {errors.confirmPassword && (
+                                <p className="text-red-600 text-xs mt-1.5">{errors.confirmPassword.message}</p>
+                            )}
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-3 text-sm font-semibold tracking-wider transition disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                        >
+                            {isSubmitting ? "Creating account..." : "Create account"}
+                        </button>
+
+                        <div className="text-center pt-2">
+                            <p className="text-sm text-[#8d90a2]">
+                                Already have one?{" "}
+                                <Link href="/login" className="text-[#b7c4ff] font-medium hover:text-white underline underline-offset-2">
+                                    Log in
+                                </Link>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}
