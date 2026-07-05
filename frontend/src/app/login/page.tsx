@@ -79,7 +79,7 @@ function LoginPageContent() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#131313]/95 via-[#131313]/70 to-black/50" />
 
                 <div className="relative z-10 p-12 flex items-center gap-2">
-                    <Camera size={26} strokeWidth={1.5} className="text-white" />
+                    <Camera size={26} strokeWidth={1.5} className="text-[#a5c1fc]" />
                     <span className="text-lg font-semibold tracking-tight text-[#a5c1fc]">SHUTTER</span>
                 </div>
 
