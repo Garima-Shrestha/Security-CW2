@@ -21,6 +21,16 @@ export default function Navbar() {
             </Link>
             <div className="flex items-center gap-4 text-sm">
                 <span className="text-[#8d90a2]">Hi, {user.username}</span>
+                {user.role === "admin" && (
+                    <>
+                        <Link href="/admin/categories" className="text-[#e5e2e1] hover:text-[#0052ff]">
+                            Categories
+                        </Link>
+                        <Link href="/admin/equipment/new" className="text-[#e5e2e1] hover:text-[#0052ff]">
+                            Add Equipment
+                        </Link>
+                    </>
+                )}
                 <Link href="/settings/security" className="flex items-center gap-1 text-[#e5e2e1] hover:text-[#0052ff]">
                     <ShieldCheck size={16} /> MFA
                 </Link>

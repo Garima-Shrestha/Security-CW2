@@ -73,7 +73,7 @@ function LoginPageContent() {
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2 bg-[#131313]">
-            {/* Left panel - branding */}
+            {/* Left panel: branding */}
             <div className="hidden lg:flex flex-col justify-between relative overflow-hidden">
                 <Image src={cameraImg} alt="Camera lens" fill priority className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#131313]/95 via-[#131313]/70 to-black/50" />
@@ -96,7 +96,7 @@ function LoginPageContent() {
                 </div>
             </div>
 
-            {/* Right panel - form */}
+            {/* Right panel: form */}
             <div className="flex items-center justify-center px-6 py-12 bg-[#131313]">
                 <div className="w-full max-w-sm space-y-8">
                     <div className="lg:hidden flex items-center gap-2 mb-4">
@@ -252,7 +252,7 @@ function LoginPageContent() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full bg-[#FFB800] hover:bg-[#e6a600] text-neutral-900 rounded-lg py-2.5 text-sm font-semibold tracking-wide transition disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                                    className="w-full bg-[#0055ff] hover:bg-[#004de6] text-white-900 rounded-lg py-2.5 text-sm font-semibold tracking-wide transition disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                                 >
                                     {isSubmitting ? "Verifying..." : "Verify and log in"}
                                 </button>
