@@ -11,10 +11,11 @@ export default function ProtectedRoute({
     children: React.ReactNode;
     adminOnly?: boolean;
 }) {
-    const { user } = useAuth();
+    const { user, isLoading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
+        if (isLoading) return;
         if (!user) {
             router.replace("/login");
             return;
@@ -22,8 +23,9 @@ export default function ProtectedRoute({
         if (adminOnly && user.role !== "admin") {
             router.replace("/");
         }
-    }, [user, adminOnly, router]);
+    }, [user, isLoading, adminOnly, router]);
 
+    if (isLoading) return null;
     if (!user) return null;
     if (adminOnly && user.role !== "admin") return null;
 
