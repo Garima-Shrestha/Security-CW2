@@ -6,8 +6,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import helmet from "helmet";
-import mongoSanitize from "express-mongo-sanitize";
-import hpp from "hpp";
+import { securitySanitize } from "./middlewares/security-sanitize.middleware";
 
 import passport from "./config/passport";
 import { SESSION_SECRET, NODE_ENV, CLIENT_URL } from "./config";
@@ -54,11 +53,9 @@ app.use(
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cookieParser());
 
-// Removes $ and . from requests so MongoDB operators can’t be injected
-app.use(mongoSanitize());
-
-// blocks http parameter pollution, eg ?role=user&role=admin resolving to an array
-app.use(hpp());
+// Remove NoSQL injection keys and prevent duplicate query parameters.
+// Custom middleware is used because Express 5 doesn't allow req.query to be reassigned.
+app.use(securitySanitize);
 
 // Only used briefly during Google OAuth login, not needed anywhere else
 app.use(
