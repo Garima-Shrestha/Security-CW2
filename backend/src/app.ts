@@ -99,6 +99,9 @@ app.use("/api/admin/rentals", adminRentalRoutes);
 
 // Final error handler that catches anything not handled in controllers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === "CastError") {
+        return res.status(404).json({ success: false, message: "Resource not found" });
+    }
     if (err.code === "EBADCSRFTOKEN" || err.message === "invalid csrf token") {
         logger.warn("CSRF token validation failed", { path: req.path, ip: req.ip });
         return res.status(403).json({ success: false, message: "Invalid or missing CSRF token" });
