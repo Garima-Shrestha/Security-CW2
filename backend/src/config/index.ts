@@ -48,6 +48,10 @@ export const SESSION_SECRET: string = NODE_ENV === 'production'
     ? required('SESSION_SECRET')
     : (process.env.SESSION_SECRET || 'dev_only_session_secret_change_me');
 
+export const AES_SECRET_KEY: string = NODE_ENV === 'production'
+    ? required('AES_SECRET_KEY')
+    : (process.env.AES_SECRET_KEY || 'dev_only_aes_key_change_me');
+
 // TOTP
 export const TOTP_ISSUER: string = process.env.TOTP_ISSUER || 'LensRental';
 

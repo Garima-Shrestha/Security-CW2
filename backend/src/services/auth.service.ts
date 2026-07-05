@@ -10,6 +10,7 @@ import { sendEmail } from "../config/email";
 import { RESET_TOKEN_EXPIRY, CLIENT_URL } from "../config";
 import { JWT_SECRET, JWT_EXPIRY, PRE_AUTH_TOKEN_EXPIRY, MAX_FAILED_ATTEMPTS, LOCKOUT_DURATION_MINUTES, PASSWORD_HISTORY_LIMIT,} from "../config";
 import { hashUserAgent } from "../utils/device"; 
+import { encrypt, decrypt } from "../utils/encryption";
 
 let userRepository = new UserRepository();
 let totpService = new TotpService();
@@ -112,7 +113,7 @@ export class AuthService {
             throw new HttpError(401, "MFA not configured for this account");
         }
 
-        const isValid = totpService.verifyCode(user.totpSecret, code);
+        const isValid = totpService.verifyCode(decrypt(user.totpSecret), code);
         if (!isValid) {
             throw new HttpError(401, "Invalid authentication code");
         }
@@ -131,7 +132,7 @@ export class AuthService {
         const qrCode = await totpService.generateQrCodeDataUrl(otpauthUrl!);
 
         // Store secret but keep isTotpEnabled=false until user confirms with a valid code
-        await userRepository.updateOneUser(userId, { totpSecret: base32 } as any);
+        await userRepository.updateOneUser(userId, { totpSecret: encrypt(base32) } as any);
 
         return { qrCode, secret: base32 };
     }
@@ -143,7 +144,7 @@ export class AuthService {
             throw new HttpError(400, "TOTP setup not initiated");
         }
 
-        const isValid = totpService.verifyCode(user.totpSecret, code);
+        const isValid = totpService.verifyCode(decrypt(user.totpSecret), code);
         if (!isValid) {
             throw new HttpError(401, "Invalid code, MFA not enabled");
         }
