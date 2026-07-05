@@ -3,6 +3,7 @@ import { CreateEquipmentDto, UpdateEquipmentDto } from "../dtos/equipment.dtos";
 import { HttpError } from "../errors/http-error";
 import { sanitizeText, sanitizeRichText } from "../utils/sanitize";
 import { logActivity } from "../config/logger";
+import { fuzzyMatch } from "../utils/fuzzy";
 
 const equipmentRepository = new EquipmentRepository();
 
@@ -57,9 +58,19 @@ export class EquipmentService {
         const currentPage = page ? parseInt(page, 10) : 1;
         const pageSize = size ? parseInt(size, 10) : 10;
 
-        const { equipment, total } = await equipmentRepository.getAllEquipmentPaginated(
+        let { equipment, total } = await equipmentRepository.getAllEquipmentPaginated(
             currentPage, pageSize, searchTerm, categoryId
         );
+
+        // Fuzzy fallback for typo-tolerant search when exact/substring match finds nothing
+        if (searchTerm && total === 0) {
+            const allActive = await equipmentRepository.getAllActiveForFuzzySearch(categoryId);
+            const matched = allActive.filter(e =>
+                fuzzyMatch(e.title, searchTerm) || fuzzyMatch(e.brand, searchTerm) || fuzzyMatch(e.model, searchTerm)
+            );
+            total = matched.length;
+            equipment = matched.slice((currentPage - 1) * pageSize, (currentPage - 1) * pageSize + pageSize);
+        }
 
         return {
             equipment,

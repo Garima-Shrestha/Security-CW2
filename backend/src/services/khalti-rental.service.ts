@@ -3,6 +3,7 @@ import { KHALTI_BASE_URL, KHALTI_SECRET_KEY, KHALTI_RETURN_URL, KHALTI_WEBSITE_U
 import { KhaltiRepository } from "../repositories/khalti.repository";
 import { RentalRepository } from "../repositories/rental.repository";
 import { logActivity, logSecurityEvent } from "../config/logger";
+import { safeFetch } from "../utils/safe-fetch";
 
 let khaltiRepo = new KhaltiRepository();
 let rentalRepo = new RentalRepository();
@@ -27,7 +28,7 @@ export class KhaltiRentalService {
         const totalAmountNpr = rental.rentalAmount + rental.depositAmount;
         const amountPaisa = Math.round(totalAmountNpr * 100);
 
-        const response = await fetch(`${KHALTI_BASE_URL}/epayment/initiate/`, {
+        const response = await safeFetch(`${KHALTI_BASE_URL}/epayment/initiate/`, {
             method: "POST",
             headers: {
                 Authorization: `Key ${KHALTI_SECRET_KEY}`,
@@ -75,7 +76,7 @@ export class KhaltiRentalService {
 
         if (!KHALTI_SECRET_KEY) throw new HttpError(500, "Khalti secret key missing");
 
-        const response = await fetch(`${KHALTI_BASE_URL}/epayment/lookup/`, {
+        const response = await safeFetch(`${KHALTI_BASE_URL}/epayment/lookup/`, {
             method: "POST",
             headers: {
                 Authorization: `Key ${KHALTI_SECRET_KEY}`,

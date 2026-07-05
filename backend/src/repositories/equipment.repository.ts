@@ -6,6 +6,7 @@ export interface IEquipmentRepository {
     updateOneEquipment(id: string, data: Partial<IEquipment>): Promise<IEquipment | null>;
     deleteOneEquipment(id: string): Promise<boolean | null>;
     getAllEquipmentPaginated(page: number, size: number, searchTerm?: string, categoryId?: string): Promise<{ equipment: IEquipment[]; total: number }>;
+    getAllActiveForFuzzySearch(categoryId?: string): Promise<IEquipment[]>;
 }
 
 export class EquipmentRepository implements IEquipmentRepository {
@@ -53,5 +54,11 @@ export class EquipmentRepository implements IEquipmentRepository {
         ]);
 
         return { equipment, total };
+    }
+
+    async getAllActiveForFuzzySearch(categoryId?: string): Promise<IEquipment[]> {
+        const filter: any = { isActive: true };
+        if (categoryId) filter.category = categoryId;
+        return await EquipmentModel.find(filter).populate("category");
     }
 }
