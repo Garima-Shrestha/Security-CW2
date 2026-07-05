@@ -29,6 +29,7 @@ const app: Application = express();
 app.use(enforceHttps);
 app.use(helmet({
     hsts: { maxAge: 63072000, includeSubDomains: true, preload: true },
+    crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
