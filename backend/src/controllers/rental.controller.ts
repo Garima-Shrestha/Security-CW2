@@ -3,6 +3,7 @@ import z from "zod";
 import { RentalService } from "../services/rental.service";
 import { KhaltiRentalService } from "../services/khalti-rental.service";
 import { CreateRentalRequestDto } from "../dtos/rental.dto";
+import { CancelRentalDto } from "../dtos/rental.dto";
 
 let rentalService = new RentalService();
 let khaltiRentalService = new KhaltiRentalService();
@@ -82,7 +83,12 @@ export class RentalController {
             const userId = req.user?._id;
             if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
 
-            const rental = await rentalService.cancelRental(userId.toString(), req.params.id as string);
+            const parsed = CancelRentalDto.safeParse(req.body || {});
+            if (!parsed.success) {
+                return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
+            }
+
+            const rental = await rentalService.cancelRental(userId.toString(), req.params.id as string, parsed.data.reason);
             return res.status(200).json({ success: true, data: rental, message: "Rental cancelled" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });

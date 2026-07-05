@@ -3,6 +3,7 @@ import { EquipmentRepository } from "../repositories/equipment.repository";
 import { CreateRentalRequestDto } from "../dtos/rental.dto";
 import { HttpError } from "../errors/http-error";
 import { logActivity, logSecurityEvent } from "../config/logger";
+import { sanitizeText } from "../utils/sanitize";
 
 let rentalRepo = new RentalRepository();
 let equipmentRepo = new EquipmentRepository();
@@ -77,14 +78,17 @@ export class RentalService {
         };
     }
 
-    async cancelRental(userId: string, rentalId: string) {
+    async cancelRental(userId: string, rentalId: string, reason?: string) {
         const rental = await this.getOwnedRental(userId, rentalId);
 
         if (!["pending", "confirmed"].includes(rental.status)) {
             throw new HttpError(400, `Cannot cancel a rental in status '${rental.status}'`);
         }
 
-        const updated = await rentalRepo.updateRental(rentalId, { status: "cancelled" });
+        const updated = await rentalRepo.updateRental(rentalId, {
+            status: "cancelled",
+            cancellationReason: reason ? sanitizeText(reason) : undefined,
+        });
         logActivity("RENTAL_CANCELLED", { userId, rentalId });
         return updated;
     }

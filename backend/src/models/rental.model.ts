@@ -18,6 +18,7 @@ const RentalSchema: Schema = new Schema({
     deductionAmount: { type: Number, default: 0, min: 0 },
     deductionReason: { type: String, required: false },
     depositRefunded: { type: Boolean, default: false },
+    cancellationReason: { type: String, required: false },
 
     pickupConfirmedAt: { type: Date, required: false },
     returnedAt: { type: Date, required: false },
@@ -48,6 +49,7 @@ export interface IRental extends Document {
     deductionAmount: number;
     deductionReason?: string;
     depositRefunded: boolean;
+    cancellationReason?: string;
     pickupConfirmedAt?: Date;
     returnedAt?: Date;
     isPaid: boolean;

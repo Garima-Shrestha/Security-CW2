@@ -30,6 +30,7 @@ export const RentalSchema = z.object({
     deductionAmount: z.number().min(0).default(0),
     deductionReason: z.string().max(500).optional(),
     depositRefunded: z.boolean().default(false),
+    cancellationReason: z.string().max(300).optional(),
 
     pickupConfirmedAt: z.date().optional(),
     returnedAt: z.date().optional(),
