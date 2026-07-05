@@ -14,6 +14,7 @@ import { SESSION_SECRET, NODE_ENV, CLIENT_URL } from "./config";
 import { generalRateLimiter } from "./middlewares/rate-limit.middleware";
 import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrf.middleware";
 import { logger } from "./config/logger";
+import { enforceHttps } from "./middlewares/https-enforce.middleware";
 
 import authRoutes from "./routes/auth.route";
 import equipmentCategoryRoutes from "./routes/equipment-category.route";
@@ -25,8 +26,23 @@ dotenv.config();
 
 const app: Application = express();
 
-// security headers - CSP, disables x-powered-by, etc
-app.use(helmet());
+// security headers: CSP, disables x-powered-by, etc
+app.use(enforceHttps);
+app.use(helmet({
+    hsts: { maxAge: 63072000, includeSubDomains: true, preload: true },
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", CLIENT_URL],
+            connectSrc: ["'self'", CLIENT_URL],
+            objectSrc: ["'none'"],
+            frameAncestors: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    },
+}));
 
 app.use(
     cors({
