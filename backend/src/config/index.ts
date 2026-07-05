@@ -12,7 +12,7 @@ function required(key: string): string {
 export const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5050;
 export const NODE_ENV: string = process.env.NODE_ENV || 'development';
 
-export const MONGODB_URI: string = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/lensrental';
+export const MONGODB_URI: string = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/shutter';
 
 // If JWT is missing, throw an error instead of falling back.
 export const JWT_SECRET: string = NODE_ENV === 'production'
@@ -53,7 +53,7 @@ export const AES_SECRET_KEY: string = NODE_ENV === 'production'
     : (process.env.AES_SECRET_KEY || 'dev_only_aes_key_change_me');
 
 // TOTP
-export const TOTP_ISSUER: string = process.env.TOTP_ISSUER || 'LensRental';
+export const TOTP_ISSUER: string = process.env.TOTP_ISSUER || 'Shutter';
 
 // Password policy
 export const PASSWORD_EXPIRY_DAYS: number = 90;
