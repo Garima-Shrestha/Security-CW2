@@ -13,7 +13,10 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "types": ["node", "jest"]  // this was added
+    "types": ["node", "jest"]
+  },
+  "ts-node": {
+    "files": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
