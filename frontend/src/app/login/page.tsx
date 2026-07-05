@@ -41,7 +41,7 @@ function LoginPageContent() {
                 setPreAuthToken(result.preAuthToken);
                 setStep("mfa");
             } else {
-                router.push("/");
+                router.push("/equipment");
             }
         } catch (err: any) {
             setServerError(err?.response?.data?.message || "Login failed. Please try again.");
@@ -56,7 +56,7 @@ function LoginPageContent() {
         setIsSubmitting(true);
         try {
             await loginStepTwo(preAuthToken, values.code);
-            router.push("/");
+            router.push("/equipment");
         } catch (err: any) {
             setServerError(err?.response?.data?.message || "Invalid or expired code.");
         } finally {
