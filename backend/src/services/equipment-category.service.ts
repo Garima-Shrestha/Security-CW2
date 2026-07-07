@@ -52,9 +52,9 @@ export class EquipmentCategoryService {
         return deleted;
     }
 
-    async getAllCategories() {
+    async getAllCategories(includeInactive = false) {
         const categories = await categoryRepository.getAllCategories();
-        return categories.filter(c => c.isActive);
+        return includeInactive ? categories : categories.filter(c => c.isActive);
     }
 
     async getCategoryById(id: string) {

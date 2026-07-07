@@ -46,7 +46,8 @@ export class EquipmentCategoryController {
 
     async getAllCategories(req: Request, res: Response) {
         try {
-            const categories = await categoryService.getAllCategories();
+            const includeInactive = req.user?.role === "admin";
+            const categories = await categoryService.getAllCategories(includeInactive);
             return res.status(200).json({ success: true, data: categories, message: "Categories fetched successfully" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
