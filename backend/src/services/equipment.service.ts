@@ -48,18 +48,19 @@ export class EquipmentService {
         return deleted;
     }
 
-    async getEquipmentById(id: string) {
+    async getEquipmentById(id: string, includeInactive = false) {
         const equipment = await equipmentRepository.getEquipmentById(id);
-        if (!equipment || !equipment.isActive) throw new HttpError(404, "Equipment not found");
+        if (!equipment) throw new HttpError(404, "Equipment not found");
+        if (!equipment.isActive && !includeInactive) throw new HttpError(404, "Equipment not found");
         return equipment;
     }
 
-    async getAllEquipmentPaginated(page?: string, size?: string, searchTerm?: string, categoryId?: string) {
+    async getAllEquipmentPaginated(page?: string, size?: string, searchTerm?: string, categoryId?: string, includeInactive?: boolean) {
         const currentPage = page ? parseInt(page, 10) : 1;
         const pageSize = size ? parseInt(size, 10) : 10;
 
         let { equipment, total } = await equipmentRepository.getAllEquipmentPaginated(
-            currentPage, pageSize, searchTerm, categoryId
+            currentPage, pageSize, searchTerm, categoryId, includeInactive
         );
 
         // Fuzzy fallback for typo-tolerant search when exact/substring match finds nothing

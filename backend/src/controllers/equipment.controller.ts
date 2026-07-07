@@ -34,8 +34,32 @@ export class EquipmentController {
                 return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
             }
 
+            const files = req.files as Express.Multer.File[] | undefined;
+            const newImages = files?.map(f => `/uploads/images/${f.filename}`) || [];
+
+            let keptImages: string[] = [];
+            if (req.body.existingImages) {
+                try {
+                    keptImages = JSON.parse(req.body.existingImages);
+                } catch {
+                    keptImages = [];
+                }
+            }
+
+            const finalImages = [...keptImages, ...newImages];
+            if (finalImages.length === 0) {
+                return res.status(400).json({ success: false, message: "At least one image is required" });
+            }
+            if (finalImages.length > 6) {
+                return res.status(400).json({ success: false, message: "Max 6 images allowed" });
+            }
+
             const adminId = req.user?._id?.toString() || "unknown";
-            const updated = await equipmentService.updateEquipment(req.params.id as string, parsed.data, adminId);
+            const updated = await equipmentService.updateEquipment(
+                req.params.id as string,
+                { ...parsed.data, images: finalImages },
+                adminId
+            );
             return res.status(200).json({ success: true, data: updated, message: "Equipment updated successfully" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
@@ -55,7 +79,8 @@ export class EquipmentController {
     async getAllEquipment(req: Request, res: Response) {
         try {
             const { page, size, searchTerm, categoryId } = req.query as any;
-            const result = await equipmentService.getAllEquipmentPaginated(page, size, searchTerm, categoryId);
+            const includeInactive = req.user?.role === "admin";
+            const result = await equipmentService.getAllEquipmentPaginated(page, size, searchTerm, categoryId, includeInactive);
             return res.status(200).json({
                 success: true,
                 data: result.equipment,
@@ -69,7 +94,8 @@ export class EquipmentController {
 
     async getEquipmentById(req: Request, res: Response) {
         try {
-            const equipment = await equipmentService.getEquipmentById(req.params.id as string);
+            const includeInactive = req.user?.role === "admin";
+            const equipment = await equipmentService.getEquipmentById(req.params.id as string, includeInactive);
             return res.status(200).json({ success: true, data: equipment, message: "Equipment fetched successfully" });
         } catch (error: any) {
             return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });

@@ -15,5 +15,5 @@ export const CreateEquipmentDto = EquipmentSchema.pick({
 });
 export type CreateEquipmentDto = z.infer<typeof CreateEquipmentDto>;
 
-export const UpdateEquipmentDto = EquipmentSchema.partial().omit({ images: true });
+export const UpdateEquipmentDto = EquipmentSchema.partial();
 export type UpdateEquipmentDto = z.infer<typeof UpdateEquipmentDto>;

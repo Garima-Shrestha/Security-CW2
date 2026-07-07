@@ -5,7 +5,7 @@ export interface IEquipmentRepository {
     getEquipmentById(id: string): Promise<IEquipment | null>;
     updateOneEquipment(id: string, data: Partial<IEquipment>): Promise<IEquipment | null>;
     deleteOneEquipment(id: string): Promise<boolean | null>;
-    getAllEquipmentPaginated(page: number, size: number, searchTerm?: string, categoryId?: string): Promise<{ equipment: IEquipment[]; total: number }>;
+    getAllEquipmentPaginated(page: number, size: number, searchTerm?: string, categoryId?: string, includeInactive?: boolean): Promise<{ equipment: IEquipment[]; total: number }>;
     getAllActiveForFuzzySearch(categoryId?: string): Promise<IEquipment[]>;
 }
 
@@ -32,9 +32,10 @@ export class EquipmentRepository implements IEquipmentRepository {
         page: number,
         size: number,
         searchTerm?: string,
-        categoryId?: string
+        categoryId?: string,
+        includeInactive?: boolean
     ): Promise<{ equipment: IEquipment[]; total: number }> {
-        const filter: any = { isActive: true };
+        const filter: any = includeInactive ? {} : { isActive: true };
 
         if (categoryId) filter.category = categoryId;
         if (searchTerm) {

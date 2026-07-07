@@ -11,7 +11,7 @@ export const EquipmentSchema = z.object({
     depositAmount: z.preprocess(val => Number(val), z.number().min(0)),
     specs: z.record(z.string(), z.string()).optional(), // e.g. { sensor: "Full Frame", mount: "EF" }
     images: z.array(z.string()).min(1, "At least one image is required").max(6, "Max 6 images"),
-    isActive: z.boolean().default(true),
+    isActive: z.preprocess(val => val === "true" || val === true, z.boolean()).default(true),
 });
 
 export type EquipmentType = z.infer<typeof EquipmentSchema>;

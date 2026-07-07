@@ -12,8 +12,22 @@ router.get("/", equipmentController.getAllEquipment);
 router.get("/:id", equipmentController.getEquipmentById);
 
 // Admin-only writes
-router.post("/", adminOnlyMiddleware, uploads.array("images", 6), equipmentController.createEquipment);
-router.put("/:id", adminOnlyMiddleware, equipmentController.updateEquipment);
+router.post("/", adminOnlyMiddleware, (req, res, next) => {
+    uploads.array("images", 6)(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({ success: false, message: err.message || "File upload error" });
+        }
+        next();
+    });
+}, equipmentController.createEquipment);
+router.put("/:id", adminOnlyMiddleware, (req, res, next) => {
+    uploads.array("images", 6)(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({ success: false, message: err.message || "File upload error" });
+        }
+        next();
+    });
+}, equipmentController.updateEquipment);
 router.delete("/:id", adminOnlyMiddleware, equipmentController.deleteEquipment);
 
 export default router;
