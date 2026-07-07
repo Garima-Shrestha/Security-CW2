@@ -6,6 +6,7 @@ import { UserSchema } from '../types/user.type';
 export const RegisterUserDto = UserSchema.pick({
     username: true,
     email: true,
+    phone: true,
     imageUrl: true,
 }).extend({
     password: z.string()

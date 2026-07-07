@@ -4,6 +4,7 @@ import { UserType } from "../types/user.type";
 const UserSchema: Schema = new Schema({
     username: { type: String, required: true, unique: true, minLength: 2, maxLength: 30 },
     email: { type: String, required: true, unique: true },
+    phone: { type: String, required: false },
     password: { type: String, required: false, select: false }, // select:false so it's never returned by default
     role: { type: String, enum: ["admin", "user"], default: "user" },
     imageUrl: { type: String, required: false },

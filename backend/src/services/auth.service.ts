@@ -32,6 +32,7 @@ export class AuthService {
         const newUser = await userRepository.createUser({
             username: sanitizeText(data.username),
             email: data.email,
+            phone: sanitizeText(data.phone),
             password: hashedPassword,
             imageUrl: data.imageUrl,
             authProvider: "local",

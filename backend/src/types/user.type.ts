@@ -3,6 +3,7 @@ import z from 'zod';
 export const UserSchema = z.object({
     username: z.string().min(2).max(30),
     email: z.string().email(),
+    phone: z.string().regex(/^\d{8,15}$/, "Phone number must be 8-15 digits"),
     // password is optional at schema level because Google OAuth users won't have one
     password: z.string().min(12).optional(),
     role: z.enum(['admin', 'user']).default('user'),
