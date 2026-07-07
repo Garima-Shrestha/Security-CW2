@@ -12,6 +12,8 @@ export interface IUserRepository {
     incrementFailedAttempts(id: string): Promise<IUser | null>;
     resetFailedAttempts(id: string): Promise<IUser | null>;
     setLockout(id: string, until: Date): Promise<IUser | null>;
+
+    getAllUsersPaginated(page: number, size: number, searchTerm?: string): Promise<{ users: IUser[]; total: number }>;
 }
 
 export class UserRepository implements IUserRepository {
@@ -73,6 +75,21 @@ export class UserRepository implements IUserRepository {
             { $set: { lockoutUntil: until } },
             { new: true }
         );
+    }
+
+    async getAllUsersPaginated(page: number, size: number, searchTerm?: string): Promise<{ users: IUser[]; total: number }> {
+        const filter: any = {};
+        if (searchTerm) {
+            filter.$or = [
+                { username: { $regex: escapeRegex(searchTerm), $options: "i" } },
+                { email: { $regex: escapeRegex(searchTerm), $options: "i" } },
+            ];
+        }
+        const [users, total] = await Promise.all([
+            UserModel.find(filter).sort({ createdAt: -1 }).skip((page - 1) * size).limit(size),
+            UserModel.countDocuments(filter),
+        ]);
+        return { users, total };
     }
 }
 
