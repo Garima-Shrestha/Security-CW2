@@ -63,4 +63,17 @@ export class RentalAdminService {
         }
         return overdue.length;
     }
+
+    // Auto-cancel pending rentals left unpaid so equipment isn't blocked forever
+    async cancelStalePendingRentals(olderThanMinutes = 30) {
+        const stale = await rentalRepo.getStalePendingRentals(olderThanMinutes);
+        for (const rental of stale) {
+            await rentalRepo.updateRental(rental._id.toString(), {
+                status: "cancelled",
+                cancellationReason: "Auto-cancelled: payment not completed in time",
+            });
+            logActivity("RENTAL_AUTO_CANCELLED", { rentalId: rental._id.toString() });
+        }
+        return stale.length;
+    }
 }

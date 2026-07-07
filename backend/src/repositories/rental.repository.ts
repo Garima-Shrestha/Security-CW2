@@ -13,6 +13,8 @@ export interface IRentalRepository {
     getAllRentalsPaginated(page: number, size: number, status?: RentalStatusType, searchTerm?: string): Promise<{ rentals: IRental[]; total: number }>;
 
     getOverdueRentals(): Promise<IRental[]>;
+    getStalePendingRentals(olderThanMinutes: number): Promise<IRental[]>;
+    isCurrentlyBooked(equipmentId: string): Promise<boolean>;
 }
 
 export class RentalRepository implements IRentalRepository {
@@ -103,5 +105,25 @@ export class RentalRepository implements IRentalRepository {
             status: "active",
             endDate: { $lt: new Date() },
         });
+    }
+
+    async getStalePendingRentals(olderThanMinutes: number): Promise<IRental[]> {
+        const cutoff = new Date(Date.now() - olderThanMinutes * 60 * 1000);
+        return await RentalModel.find({
+            status: "pending",
+            isPaid: false,
+            createdAt: { $lt: cutoff },
+        });
+    }
+
+    async isCurrentlyBooked(equipmentId: string): Promise<boolean> {
+        const now = new Date();
+        const conflict = await RentalModel.findOne({
+            equipment: equipmentId,
+            status: { $in: ["pending", "confirmed", "active", "overdue"] },
+            startDate: { $lte: now },
+            endDate: { $gte: now },
+        });
+        return !!conflict;
     }
 }
