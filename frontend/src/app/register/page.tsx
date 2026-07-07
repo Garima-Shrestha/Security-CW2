@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Camera, Eye, EyeOff, Check, X, ShieldCheck, Lock, Mail, User as UserIcon } from "lucide-react";
 import api from "@/lib/axios";
+import { useAuth } from "@/hooks/useAuth";
 import { registerSchema, RegisterFormValues } from "@/lib/validation/auth.schema";
 import cameraImg from "@/assets/camera.png";
 
@@ -21,6 +22,7 @@ const PASSWORD_RULES = [
 
 export default function RegisterPage() {
     const router = useRouter();
+    const { user, isLoading: authLoading } = useAuth();
     const [serverError, setServerError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -38,6 +40,16 @@ export default function RegisterPage() {
 
     const passwordValue = watch("password") || "";
 
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.replace("/equipment");
+        }
+    }, [user, authLoading, router]);
+
+    if (authLoading || user) {
+        return null;
+    }
+
     async function onSubmit(values: RegisterFormValues) {
         setServerError(null);
         setIsSubmitting(true);
@@ -45,6 +57,7 @@ export default function RegisterPage() {
             await api.post("/api/auth/register", {
                 username: values.username,
                 email: values.email,
+                phone: values.phone,
                 password: values.password,
             });
             router.push("/login?registered=true");
@@ -154,6 +167,23 @@ export default function RegisterPage() {
                             </div>
                             {errors.email && (
                                 <p className="text-red-600 text-xs mt-1.5">{errors.email.message}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label htmlFor="phone" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                                Phone Number
+                            </label>
+                            <input
+                                id="phone"
+                                type="tel"
+                                autoComplete="off"
+                                {...register("phone")}
+                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                placeholder="98XXXXXXXX"
+                            />
+                            {errors.phone && (
+                                <p className="text-red-600 text-xs mt-1.5">{errors.phone.message}</p>
                             )}
                         </div>
 

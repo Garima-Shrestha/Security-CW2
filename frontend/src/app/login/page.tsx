@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ function LoginPageContent() {
     const searchParams = useSearchParams();
     const justRegistered = searchParams.get("registered") === "true";
 
-    const { loginStepOne, loginStepTwo } = useAuth();
+    const { user, isLoading: authLoading, loginStepOne, loginStepTwo } = useAuth();
 
     const [step, setStep] = useState<"credentials" | "mfa">("credentials");
     const [preAuthToken, setPreAuthToken] = useState<string | null>(null);
@@ -31,6 +31,16 @@ function LoginPageContent() {
     const totpForm = useForm<TotpFormValues>({
         resolver: zodResolver(totpSchema),
     });
+
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.replace("/equipment");
+        }
+    }, [user, authLoading, router]);
+
+    if (authLoading || user) {
+        return null;
+    }
 
     async function onSubmitCredentials(values: LoginFormValues) {
         setServerError(null);

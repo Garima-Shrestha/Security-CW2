@@ -153,7 +153,17 @@ function EquipmentDetailContent() {
                             <span className="text-[#e5e2e1] font-semibold">Rs. {equipment.depositAmount}</span>
                         </div>
 
-                        <button className="w-full bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-3 text-sm font-semibold transition">
+                        <div className="flex justify-between text-sm">
+                            <span className="text-[#8d90a2]">Availability</span>
+                            <span className={`font-semibold ${!equipment.isBooked ? "text-emerald-400" : "text-red-400"}`}>
+                                {equipment.isBooked ? "Currently Rented" : "In Stock"}
+                            </span>
+                        </div>
+
+                        <button
+                            onClick={() => router.push(`/rentals/new?equipmentId=${equipment._id}`)}
+                            className="w-full bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-3 text-sm font-semibold transition"
+                        >
                             Rent this equipment
                         </button>
                     </div>

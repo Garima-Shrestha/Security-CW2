@@ -19,6 +19,7 @@ export interface Equipment {
     specs?: Record<string, string>;
     images: string[];
     isActive: boolean;
+    isBooked?: boolean;
 }
 
 export interface PaginatedEquipment {
