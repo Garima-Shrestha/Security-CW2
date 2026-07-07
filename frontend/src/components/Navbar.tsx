@@ -28,14 +28,26 @@ export default function Navbar() {
             </Link>
             {user.role === "admin" ? (
                 <div className="flex items-center gap-6 text-sm justify-self-center">
+                     <Link href="/admin/users" className={navLinkClass("/admin/users")}>
+                        Users
+                    </Link>
                     <Link href="/admin/categories" className={navLinkClass("/admin/categories")}>
                         Categories
                     </Link>
                     <Link href="/admin/equipment" className={navLinkClass("/admin/equipment")}>
                         Equipment
                     </Link>
+                    <Link href="/admin/rentals" className={navLinkClass("/admin/rentals")}>
+                        Rentals
+                    </Link>
                 </div>
-            ) : <div />}
+            ) : (
+                <div className="flex items-center gap-6 text-sm justify-self-center">
+                    <Link href="/rentals" className={navLinkClass("/rentals")}>
+                        My Rentals
+                    </Link>
+                </div>
+            )}
             <div className="flex items-center gap-4 text-sm justify-self-end">
                 <span className="text-[#8d90a2]">Hi, {user.username}</span>
                 <Link href="/settings/security" className="flex items-center gap-1 text-[#e5e2e1] hover:text-[#0052ff]">
