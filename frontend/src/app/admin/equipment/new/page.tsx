@@ -194,16 +194,57 @@ function NewEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Images (max 6, jpg/png/webp)</label>
-                        <input
-                            type="file"
-                            accept=".jpg,.jpeg,.png,.webp"
-                            multiple
-                            onChange={(e) => setImages(e.target.files)}
-                            required
-                            className="w-full text-sm text-[#8d90a2] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#0052ff] file:text-white file:text-sm"
-                        />
+                        <label className="block text-sm font-medium text-[#e5e2e1] mb-3">
+                            EQUIPMENT MEDIA PORTFOLIO
+                        </label>
+                        
+                        <div 
+                            className="border-2 border-dashed border-[#434656] hover:border-[#0052ff] bg-[#1a1a1a] rounded-xl p-10 text-center transition-colors cursor-pointer"
+                            onClick={() => document.getElementById('images-upload')?.click()}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={(e) => {
+                                e.preventDefault();
+                                const files = e.dataTransfer.files;
+                                if (files.length > 0) setImages(files);
+                            }}
+                        >
+                            <div className="mx-auto w-12 h-12 bg-[#2a2a2a] rounded-xl flex items-center justify-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#8d90a2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903 5 5 0 0110.025 0 4 4 0 01-.88 7.903M12 19v-7" />
+                                </svg>
+                            </div>
+                            
+                            <p className="text-white text-lg font-medium">Drag &amp; drop equipment photos here</p>
+                            <p className="text-[#8d90a2] text-sm mt-1">or click to browse local storage</p>
+                            
+                            <div className="flex justify-center gap-2 mt-6">
+                                <span className="text-xs bg-[#2a2a2a] text-[#8d90a2] px-3 py-1 rounded-full">MAX 6 FILES</span>
+                                <span className="text-xs bg-[#2a2a2a] text-[#8d90a2] px-3 py-1 rounded-full">WEBP/JPG/PNG</span>
+                            </div>
+
+                            <input
+                                id="images-upload"
+                                type="file"
+                                accept=".jpg,.jpeg,.png,.webp"
+                                multiple
+                                onChange={(e) => setImages(e.target.files)}
+                                required
+                                className="hidden"
+                            />
+                        </div>
+
+                        {images && images.length > 0 && (
+                            <p className="text-[#8d90a2] text-sm mt-3 text-center">
+                                {images.length} file(s) selected
+                            </p>
+                        )}
                     </div>
+
+                    {error && (
+                        <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                            {error}
+                        </div>
+                    )}
 
                     <button
                         type="submit"

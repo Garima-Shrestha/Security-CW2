@@ -10,9 +10,12 @@ function AdminCategoriesContent() {
     const [categories, setCategories] = useState<EquipmentCategory[]>([]);
     const [itemCounts, setItemCounts] = useState<Record<string, number>>({});
     const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState(1);
+    const pageSize = 5;
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [isActive, setIsActive] = useState(true);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<EquipmentCategory | null>(null);
 
@@ -43,10 +46,21 @@ function AdminCategoriesContent() {
         [categories, searchTerm]
     );
 
+    const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+    const paginated = useMemo(
+        () => filtered.slice((page - 1) * pageSize, page * pageSize),
+        [filtered, page]
+    );
+
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm]);
+
     function startEdit(cat: EquipmentCategory) {
         setEditingId(cat._id);
         setName(cat.name);
         setDescription(cat.description || "");
+        setIsActive(cat.isActive);
         setSuccess(null);
         setError(null);
     }
@@ -55,6 +69,7 @@ function AdminCategoriesContent() {
         setEditingId(null);
         setName("");
         setDescription("");
+        setIsActive(true);
     }
 
     async function onSubmit(e: React.FormEvent) {
@@ -67,6 +82,7 @@ function AdminCategoriesContent() {
                 await api.put(`/api/equipment-categories/${editingId}`, {
                     name,
                     description: description || undefined,
+                    isActive,
                 });
                 setSuccess("Category updated");
             } else {
@@ -140,6 +156,23 @@ function AdminCategoriesContent() {
                         />
                     </div>
 
+                    {editingId && (
+                        <div className="flex items-center gap-3">
+                            <label className="text-sm font-medium text-[#e5e2e1]">Status</label>
+                            <button
+                                type="button"
+                                onClick={() => setIsActive((s) => !s)}
+                                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                                    isActive
+                                        ? "bg-emerald-900/30 text-emerald-400 border border-emerald-500/30"
+                                        : "bg-red-900/30 text-red-400 border border-red-500/30"
+                                }`}
+                            >
+                                {isActive ? "Active" : "Inactive"}
+                            </button>
+                        </div>
+                    )}
+
                     <div className="flex gap-3">
                         <button
                             type="submit"
@@ -179,16 +212,18 @@ function AdminCategoriesContent() {
                                 <thead>
                                     <tr className="bg-[#1a1a1a] text-left text-[#8d90a2]">
                                         <th className="px-4 py-3 font-medium">Name</th>
-                                        <th className="px-4 py-3 font-medium"># Items</th>
+                                        <th className="px-4 py-3 font-medium">Description</th>
+                                        <th className="px-4 py-3 font-medium">Items</th>
                                         <th className="px-4 py-3 font-medium">Status</th>
                                         <th className="px-4 py-3 font-medium">Created</th>
                                         <th className="px-4 py-3 font-medium">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtered.map((c) => (
+                                    {paginated.map((c) => (
                                         <tr key={c._id} className="border-t border-[#2a2a2a]">
                                             <td className="px-4 py-3 text-[#e5e2e1]">{c.name}</td>
+                                            <td className="px-4 py-3 text-[#c3c5d9] max-w-xs truncate">{c.description || "—"}</td>
                                             <td className="px-4 py-3 text-[#c3c5d9]">{itemCounts[c._id] || 0}</td>
                                             <td className="px-4 py-3">
                                                 <span
@@ -220,6 +255,41 @@ function AdminCategoriesContent() {
                             </table>
                         </div>
                     )}
+
+                    {filtered.length > 0 && (
+                    <div className="flex items-center justify-between pt-2">
+                        <p className="text-xs text-[#8d90a2]">
+                            Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, filtered.length)} of {filtered.length} categories
+                        </p>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                disabled={page <= 1}
+                                className="px-2 py-1.5 rounded-lg border border-[#434656] text-[#e5e2e1] disabled:opacity-40"
+                            >
+                                ‹
+                            </button>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                                <button
+                                    key={n}
+                                    onClick={() => setPage(n)}
+                                    className={`px-3 py-1.5 rounded-lg text-sm ${
+                                        n === page ? "bg-[#0052ff] text-white" : "border border-[#434656] text-[#e5e2e1]"
+                                    }`}
+                                >
+                                    {n}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                disabled={page >= totalPages}
+                                className="px-2 py-1.5 rounded-lg border border-[#434656] text-[#e5e2e1] disabled:opacity-40"
+                            >
+                                ›
+                            </button>
+                        </div>
+                    </div>
+                )}
                 </div>
             </div>
 
