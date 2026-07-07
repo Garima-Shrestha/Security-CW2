@@ -58,7 +58,7 @@ function EquipmentDetailContent() {
 
     return (
         <div className="min-h-screen bg-[#131313] px-6 py-10">
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="max-w-6xl mx-auto space-y-6">
                 <button
                     onClick={() => router.push("/equipment")}
                     className="flex items-center gap-1 text-sm text-[#8d90a2] hover:text-[#e5e2e1]"
@@ -66,49 +66,66 @@ function EquipmentDetailContent() {
                     <ArrowLeft size={14} /> Back
                 </button>
 
-                <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                        <div className="aspect-video bg-[#0d0d0d] rounded-xl overflow-hidden">
-                            {equipment.images?.[activeImage] && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${equipment.images[activeImage]}`}
-                                    alt={equipment.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            )}
-                        </div>
-                        {equipment.images.length > 1 && (
-                            <div className="flex gap-2">
-                                {equipment.images.map((img, idx) => (
-                                    <button
-                                        key={img}
-                                        onClick={() => setActiveImage(idx)}
-                                        className={`w-16 h-16 rounded-lg overflow-hidden border ${
-                                            idx === activeImage ? "border-[#0052ff]" : "border-[#2a2a2a]"
-                                        }`}
-                                    >
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
-                                            alt=""
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </button>
-                                ))}
-                            </div>
+                <div className="grid md:grid-cols-3 gap-8">
+                <div className="md:col-span-2 space-y-3">
+                    <div className="aspect-video bg-[#0d0d0d] rounded-xl overflow-hidden">
+                        {equipment.images?.[activeImage] && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                                src={`${process.env.NEXT_PUBLIC_API_URL}${equipment.images[activeImage]}`}
+                                alt={equipment.title}
+                                className="w-full h-full object-cover"
+                            />
                         )}
                     </div>
+                    {equipment.images.length > 1 && (
+                        <div className="flex gap-2">
+                            {equipment.images.map((img, idx) => (
+                                <button
+                                    key={img}
+                                    onClick={() => setActiveImage(idx)}
+                                    className={`w-16 h-16 rounded-lg overflow-hidden border ${
+                                        idx === activeImage ? "border-[#0052ff]" : "border-[#2a2a2a]"
+                                    }`}
+                                >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
+                                        alt=""
+                                        className="w-full h-full object-cover"
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    
+                    <div className="pt-6">
+                        <h1 className="text-3xl font-semibold text-white">{equipment.title}</h1>
+                    </div>
 
-                    <div className="space-y-4">
-                        <div>
-                            <h1 className="text-2xl font-semibold text-white">{equipment.title}</h1>
-                            <p className="text-sm text-[#8d90a2]">
-                                {equipment.brand} · {equipment.model} · {equipment.condition}
-                            </p>
+                        <div className="grid grid-cols-4 gap-4 border-t border-b border-[#2a2a2a] py-4">
+                            <div>
+                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Brand</p>
+                                <p className="text-[#e5e2e1] font-medium mt-1">{equipment.brand}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Model</p>
+                                <p className="text-[#e5e2e1] font-medium mt-1">{equipment.model}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Category</p>
+                                <p className="text-[#e5e2e1] font-medium mt-1">{equipment.category?.name}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Condition</p>
+                                <p className="text-[#0052ff] font-medium mt-1 capitalize">{equipment.condition}</p>
+                            </div>
                         </div>
 
-                        <p className="text-[#c3c5d9] text-sm leading-relaxed">{equipment.description}</p>
+                        <div className="space-y-2">
+                            <h3 className="text-xs font-medium text-[#8d90a2] uppercase tracking-wide">Description</h3>
+                            <p className="text-[#c3c5d9] text-sm leading-relaxed">{equipment.description}</p>
+                        </div>
 
                         {equipment.specs && Object.keys(equipment.specs).length > 0 && (
                             <div className="space-y-1">
@@ -121,16 +138,19 @@ function EquipmentDetailContent() {
                                 ))}
                             </div>
                         )}
+                    </div>
 
-                        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-4 space-y-2">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-[#8d90a2]">Daily rate</span>
-                                <span className="text-[#0052ff] font-semibold">Rs. {equipment.dailyRate}</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                                <span className="text-[#8d90a2]">Deposit</span>
-                                <span className="text-[#e5e2e1]">Rs. {equipment.depositAmount}</span>
-                            </div>
+                    <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 space-y-4 h-fit">
+                        <div>
+                            <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Daily Rate</p>
+                            <p className="text-2xl font-semibold text-[#b7c4ff] mt-1">
+                                Rs. {equipment.dailyRate} <span className="text-sm text-[#8d90a2] font-normal">/ day</span>
+                            </p>
+                        </div>
+
+                        <div className="border-t border-[#2a2a2a] pt-4 flex justify-between text-sm">
+                            <span className="text-[#8d90a2]">Deposit</span>
+                            <span className="text-[#e5e2e1] font-semibold">Rs. {equipment.depositAmount}</span>
                         </div>
 
                         <button className="w-full bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-3 text-sm font-semibold transition">
