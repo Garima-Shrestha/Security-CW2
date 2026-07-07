@@ -4,8 +4,11 @@ import { HttpError } from "../errors/http-error";
 import { sanitizeText, sanitizeRichText } from "../utils/sanitize";
 import { logActivity } from "../config/logger";
 import { fuzzyMatch } from "../utils/fuzzy";
+import { RentalRepository } from "../repositories/rental.repository";
+
 
 const equipmentRepository = new EquipmentRepository();
+const rentalRepository = new RentalRepository();
 
 export class EquipmentService {
     async createEquipment(data: CreateEquipmentDto, images: string[], adminId: string) {
@@ -52,7 +55,8 @@ export class EquipmentService {
         const equipment = await equipmentRepository.getEquipmentById(id);
         if (!equipment) throw new HttpError(404, "Equipment not found");
         if (!equipment.isActive && !includeInactive) throw new HttpError(404, "Equipment not found");
-        return equipment;
+        const isBooked = await rentalRepository.isCurrentlyBooked(id);
+        return { ...(equipment as any).toObject(), isBooked };
     }
 
     async getAllEquipmentPaginated(page?: string, size?: string, searchTerm?: string, categoryId?: string, includeInactive?: boolean) {

@@ -17,6 +17,10 @@ async function start() {
     setInterval(() => {
         rentalAdminService.flagOverdueRentals().catch(console.error);
     }, 60 * 60 * 1000); // hourly
+
+    setInterval(() => {
+        rentalAdminService.cancelStalePendingRentals(30).catch(console.error);
+    }, 5 * 60 * 1000); // every 5 min, cancels unpaid pending rentals older than 30 min
 }
 
 start().catch((error) => console.log(error));
