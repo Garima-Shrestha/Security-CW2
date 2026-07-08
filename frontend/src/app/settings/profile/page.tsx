@@ -51,18 +51,29 @@ function ProfileSettingsContent() {
     }
 
     return (
-        <div className="min-h-screen bg-[#131313] flex items-center justify-center px-6 py-12">
+        <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center px-6 py-12">
             <div className="w-full max-w-md space-y-6">
-                <h1 className="text-2xl font-semibold text-white">Profile Settings</h1>
-
-                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 flex items-center gap-3 text-sm">
-                    <ShieldCheck size={16} className="text-[#8d90a2]" />
-                    <span className={user?.isTotpEnabled ? "text-emerald-400" : "text-red-400"}>
-                        MFA {user?.isTotpEnabled ? "enabled" : "disabled"}
-                    </span>
+                <div className="text-center space-y-1">
+                    <h1 className="text-2xl font-semibold text-white">Profile Settings</h1>
+                    <p className="text-sm text-[#8d90a2]">Manage your account credentials and security</p>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="bg-[#0f1420] border border-[#1e2536] rounded-xl overflow-hidden">
+                    <div className="flex items-start gap-3 p-4 border-b border-[#1e2536]">
+                        <ShieldCheck 
+                            size={20} 
+                            className={user?.isTotpEnabled ? "text-emerald-500" : "text-red-600"} 
+                        />
+                        <div>
+                            <p className={`text-sm font-semibold ${user?.isTotpEnabled ? "text-emerald-500" : "text-red-600"}`}>
+                                MFA {user?.isTotpEnabled ? "enabled" : "disabled"}
+                            </p>
+                            <p className="text-xs text-[#8d90a2] mt-0.5">
+                                Enable multi-factor authentication to secure your account.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="space-y-4 p-6">
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Display Name</label>
                         <div className="relative">
@@ -71,7 +82,7 @@ function ProfileSettingsContent() {
                                 id="username"
                                 type="text"
                                 {...register("username")}
-                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
+                                className="w-full bg-[#131a2a] border border-[#252d42] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
                             />
                         </div>
                         {errors.username && <p className="text-red-600 text-xs mt-1.5">{errors.username.message}</p>}
@@ -85,7 +96,7 @@ function ProfileSettingsContent() {
                                 id="email"
                                 type="email"
                                 {...register("email")}
-                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
+                                className="w-full bg-[#131a2a] border border-[#252d42] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
                             />
                         </div>
                         {errors.email && <p className="text-red-600 text-xs mt-1.5">{errors.email.message}</p>}
@@ -99,7 +110,7 @@ function ProfileSettingsContent() {
                                 id="phone"
                                 type="tel"
                                 {...register("phone")}
-                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
+                                className="w-full bg-[#131a2a] border border-[#252d42] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
                             />
                         </div>
                         {errors.phone && <p className="text-red-600 text-xs mt-1.5">{errors.phone.message}</p>}
@@ -115,6 +126,7 @@ function ProfileSettingsContent() {
                     >
                         {isSubmitting ? "Saving..." : "Save Changes"}
                     </button>
+                    </div>
                 </form>
             </div>
         </div>
