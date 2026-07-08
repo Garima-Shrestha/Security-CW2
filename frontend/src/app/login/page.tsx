@@ -34,7 +34,7 @@ function LoginPageContent() {
 
     useEffect(() => {
         if (!authLoading && user) {
-            router.replace("/equipment");
+            router.replace(user.role === "admin" ? "/admin/users" : "/equipment");
         }
     }, [user, authLoading, router]);
 
@@ -51,7 +51,7 @@ function LoginPageContent() {
                 setPreAuthToken(result.preAuthToken);
                 setStep("mfa");
             } else {
-                router.push("/equipment");
+                router.push(result.user?.role === "admin" ? "/admin/users" : "/equipment");
             }
         } catch (err: any) {
             setServerError(err?.response?.data?.message || "Login failed. Please try again.");
@@ -65,8 +65,8 @@ function LoginPageContent() {
         setServerError(null);
         setIsSubmitting(true);
         try {
-            await loginStepTwo(preAuthToken, values.code);
-            router.push("/equipment");
+            const loggedInUser = await loginStepTwo(preAuthToken, values.code);
+            router.push(loggedInUser.role === "admin" ? "/admin/users" : "/equipment");
         } catch (err: any) {
             setServerError(err?.response?.data?.message || "Invalid or expired code.");
         } finally {

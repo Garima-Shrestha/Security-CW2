@@ -8,8 +8,8 @@ interface AuthContextValue {
     user: User | null;
     token: string | null;
     isLoading: boolean;
-    loginStepOne: (email: string, password: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string }>;
-    loginStepTwo: (preAuthToken: string, code: string) => Promise<void>;
+    loginStepOne: (email: string, password: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string; user?: User }>;
+    loginStepTwo: (preAuthToken: string, code: string) => Promise<User>;
     logout: () => void;
     setUserAndToken: (user: User, token: string) => void;
 }
@@ -23,8 +23,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Rehydrate session on page load/refresh from sessionStorage
     useEffect(() => {
-        const storedToken = sessionStorage.getItem("auth_token");
-        const storedUser = sessionStorage.getItem("auth_user");
+        const storedToken = localStorage.getItem("auth_token");
+        const storedUser = localStorage.getItem("auth_user");
         if (storedToken && storedUser) {
             setAuthToken(storedToken);
             setToken(storedToken);
@@ -37,8 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthToken(t);
         setToken(t);
         setUser(u);
-        sessionStorage.setItem("auth_token", t);
-        sessionStorage.setItem("auth_user", JSON.stringify(u));
+        localStorage.setItem("auth_token", t);
+        localStorage.setItem("auth_user", JSON.stringify(u));
     }
 
     async function loginStepOne(email: string, password: string) {
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 setUserAndToken(data, accessToken);
             }
 
-            return { requiresTotp, preAuthToken };
+            return { requiresTotp, preAuthToken, user: data as User | undefined };
         } finally {
             setIsLoading(false);
         }
@@ -62,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             const res = await api.post("/api/auth/verify-totp", { preAuthToken, code });
             setUserAndToken(res.data.data, res.data.token);
+            return res.data.data as User;
         } finally {
             setIsLoading(false);
         }
@@ -71,8 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthToken(null);
         setToken(null);
         setUser(null);
-        sessionStorage.removeItem("auth_token");
-        sessionStorage.removeItem("auth_user");
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_user");
     }
 
     return (

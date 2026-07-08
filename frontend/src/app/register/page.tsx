@@ -42,7 +42,7 @@ export default function RegisterPage() {
 
     useEffect(() => {
         if (!authLoading && user) {
-            router.replace("/equipment");
+            router.replace(user.role === "admin" ? "/admin/users" : "/equipment");
         }
     }, [user, authLoading, router]);
 
