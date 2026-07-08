@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import z from "zod";
-import { RegisterUserDto, LoginUserDto, VerifyTotpDto, EnableTotpDto, ChangePasswordDto } from "../dtos/user.dtos";
+import { RegisterUserDto, LoginUserDto, VerifyTotpDto, EnableTotpDto, ChangePasswordDto, UpdateUserDto } from "../dtos/user.dtos";
 import { AuthService } from "../services/auth.service";
 import { OAuthService } from "../services/oauth.service";
 import { RequestPasswordResetDto, ResetPasswordDto } from "../dtos/user.dtos";
@@ -126,6 +126,23 @@ export class AuthController {
 
     async getProfile(req: Request, res: Response) {
         return res.status(200).json({ success: true, data: req.user });
+    }
+
+    async updateProfile(req: Request, res: Response) {
+        try {
+            const userId = req.user?._id;
+            if (!userId) return res.status(401).json({ success: false, message: "Unauthorized" });
+
+            const parsed = UpdateUserDto.safeParse(req.body);
+            if (!parsed.success) {
+                return res.status(400).json({ success: false, message: z.prettifyError(parsed.error) });
+            }
+
+            const updated = await authService.updateProfile(userId.toString(), parsed.data);
+            return res.status(200).json({ success: true, data: updated, message: "Profile updated successfully" });
+        } catch (error: any) {
+            return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
     }
 
     // called after passport finishes the google handshake, req.user is set by passport at this point

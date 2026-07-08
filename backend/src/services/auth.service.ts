@@ -27,6 +27,11 @@ export class AuthService {
             throw new HttpError(409, "Username already in use");
         }
 
+        const existingPhone = await userRepository.getUserByPhone(data.phone);
+        if (existingPhone) {
+            throw new HttpError(409, "Phone number already in use");
+        }
+
         const hashedPassword = await bcryptjs.hash(data.password, 12);
 
         const newUser = await userRepository.createUser({
@@ -153,6 +158,35 @@ export class AuthService {
         await userRepository.updateOneUser(userId, { isTotpEnabled: true } as any);
         logActivity("MFA_ENABLED", { userId });
         return { message: "MFA enabled successfully" };
+    }
+
+    async updateProfile(userId: string, data: { username?: string; email?: string; phone?: string; imageUrl?: string }) {
+        const user = await userRepository.getUserById(userId);
+        if (!user) throw new HttpError(404, "User not found");
+
+        const updates: any = {};
+        if (data.username) {
+            const existing = await userRepository.getUserByUsername(data.username);
+            if (existing && existing._id.toString() !== userId) throw new HttpError(409, "Username already in use");
+            updates.username = sanitizeText(data.username);
+        }
+        if (data.email) {
+            const existing = await userRepository.getUserByEmail(data.email);
+            if (existing && existing._id.toString() !== userId) throw new HttpError(409, "Email already in use");
+            updates.email = data.email;
+        }
+        if (data.phone) {
+            const existingPhone = await userRepository.getUserByPhone(data.phone);
+            if (existingPhone && existingPhone._id.toString() !== userId) {
+                throw new HttpError(409, "Phone number already in use");
+            }
+            updates.phone = sanitizeText(data.phone);
+        }
+        if (data.imageUrl) updates.imageUrl = data.imageUrl;
+
+        const updated = await userRepository.updateOneUser(userId, updates);
+        logActivity("PROFILE_UPDATED", { userId });
+        return updated;
     }
 
     // Change password with reuse prevention

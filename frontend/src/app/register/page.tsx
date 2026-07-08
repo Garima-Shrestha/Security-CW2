@@ -22,7 +22,7 @@ const PASSWORD_RULES = [
 
 export default function RegisterPage() {
     const router = useRouter();
-    const { user, isLoading: authLoading } = useAuth();
+    const { user, isInitializing } = useAuth();
     const [serverError, setServerError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -41,12 +41,12 @@ export default function RegisterPage() {
     const passwordValue = watch("password") || "";
 
     useEffect(() => {
-        if (!authLoading && user) {
+        if (!isInitializing && user) {
             router.replace(user.role === "admin" ? "/admin/users" : "/equipment");
         }
-    }, [user, authLoading, router]);
+    }, [user, isInitializing, router]);
 
-    if (authLoading || user) {
+    if (isInitializing || user) {
         return null;
     }
 
@@ -106,31 +106,7 @@ export default function RegisterPage() {
                         <p className="text-[#abbad5] mt-2">Start your next production with professional precision.</p>
                     </div>
 
-                    {serverError && (
-                        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 flex items-start gap-2">
-                            <X size={16} className="mt-0.5 shrink-0" />
-                            <span>{serverError}</span>
-                        </div>
-                    )}
-
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-                        {/* <div>
-                            <label htmlFor="username" className="block text-sm font-medium text-[#d5c4ab] mb-1.5">
-                                Full Name
-                            </label>
-                            <div className="relative">
-                                <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9e8f78]" />
-                                <input
-                                    id="username"
-                                    type="text"
-                                    autoComplete="username"
-                                    {...register("username")}
-                                    className="w-full bg-[#251f14] border border-[#514532] text-white rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00d7fe] focus:border-transparent transition placeholder:text-[#9e8f78]"
-                                    placeholder="Ram Thapa"
-                                />
-                            </div>
-                            {errors.username && <p className="text-red-600 text-xs mt-1.5">{errors.username.message}</p>}
-                        </div> */}
 
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
@@ -259,6 +235,12 @@ export default function RegisterPage() {
                                 <p className="text-red-600 text-xs mt-1.5">{errors.confirmPassword.message}</p>
                             )}
                         </div>
+
+                        {serverError && (
+                            <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                                {serverError}
+                            </div>
+                        )}
 
                         <button
                             type="submit"

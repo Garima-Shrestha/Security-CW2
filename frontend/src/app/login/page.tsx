@@ -16,7 +16,7 @@ function LoginPageContent() {
     const searchParams = useSearchParams();
     const justRegistered = searchParams.get("registered") === "true";
 
-    const { user, isLoading: authLoading, loginStepOne, loginStepTwo } = useAuth();
+    const { user, isInitializing, loginStepOne, loginStepTwo } = useAuth();
 
     const [step, setStep] = useState<"credentials" | "mfa">("credentials");
     const [preAuthToken, setPreAuthToken] = useState<string | null>(null);
@@ -33,12 +33,12 @@ function LoginPageContent() {
     });
 
     useEffect(() => {
-        if (!authLoading && user) {
+        if (!isInitializing && user) {
             router.replace(user.role === "admin" ? "/admin/users" : "/equipment");
         }
-    }, [user, authLoading, router]);
+    }, [user, isInitializing, router]);
 
-    if (authLoading || user) {
+    if (isInitializing || user) {
         return null;
     }
 
@@ -127,12 +127,6 @@ function LoginPageContent() {
                                 </div>
                             )}
 
-                            {serverError && (
-                                <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
-                                    {serverError}
-                                </div>
-                            )}
-
                             <form onSubmit={credentialsForm.handleSubmit(onSubmitCredentials)} className="space-y-4" noValidate>
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
@@ -193,6 +187,12 @@ function LoginPageContent() {
                                         </p>
                                     )}
                                 </div>
+
+                                {serverError && (
+                                    <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                                        {serverError}
+                                    </div>
+                                )}
 
                                 <button
                                     type="submit"

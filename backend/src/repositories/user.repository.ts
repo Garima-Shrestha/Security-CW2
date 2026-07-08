@@ -5,6 +5,7 @@ export interface IUserRepository {
     getUserByEmail(email: string, withSecrets?: boolean): Promise<IUser | null>;
     getUserByUsername(username: string): Promise<IUser | null>;
     getUserByGoogleId(googleId: string): Promise<IUser | null>;
+    getUserByPhone(phone: string): Promise<IUser | null>;
     getUserById(id: string, withSecrets?: boolean): Promise<IUser | null>;
     updateOneUser(id: string, data: Partial<IUser>): Promise<IUser | null>;
     deleteOneUser(id: string): Promise<boolean | null>;
@@ -36,6 +37,10 @@ export class UserRepository implements IUserRepository {
 
     async getUserByGoogleId(googleId: string): Promise<IUser | null> {
         return await UserModel.findOne({ googleId });
+    }
+
+    async getUserByPhone(phone: string): Promise<IUser | null> {
+        return await UserModel.findOne({ phone });
     }
 
     async getUserById(id: string, withSecrets = false): Promise<IUser | null> {

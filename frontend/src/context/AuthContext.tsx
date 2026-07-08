@@ -8,6 +8,7 @@ interface AuthContextValue {
     user: User | null;
     token: string | null;
     isLoading: boolean;
+    isInitializing: boolean;
     loginStepOne: (email: string, password: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string; user?: User }>;
     loginStepTwo: (preAuthToken: string, code: string) => Promise<User>;
     logout: () => void;
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isInitializing, setIsInitializing] = useState(true);
 
     // Rehydrate session on page load/refresh from sessionStorage
     useEffect(() => {
@@ -31,6 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(JSON.parse(storedUser));
         }
         setIsLoading(false);
+        setIsInitializing(false);
     }, []);
 
     function setUserAndToken(u: User, t: string) {
@@ -78,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return (
         <AuthContext.Provider
-            value={{ user, token, isLoading, loginStepOne, loginStepTwo, logout, setUserAndToken }}
+            value={{ user, token, isLoading, isInitializing, loginStepOne, loginStepTwo, logout, setUserAndToken }}
         >
             {children}
         </AuthContext.Provider>

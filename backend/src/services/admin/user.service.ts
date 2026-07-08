@@ -25,7 +25,16 @@ export class UserAdminService {
         if (existingEmail) throw new HttpError(409, "Email already in use");
 
         const existingUsername = await userRepository.getUserByUsername(data.username);
-        if (existingUsername) throw new HttpError(409, "Username already in use");
+        if (existingUsername) {
+            throw new HttpError(409, "Username already in use");
+        }
+
+        if (data.phone) {
+            const existingPhone = await userRepository.getUserByPhone(data.phone);
+            if (existingPhone) {
+                throw new HttpError(409, "Phone number already in use");
+            }
+        }
 
         const hashedPassword = await bcryptjs.hash(data.password, 12);
 
@@ -60,7 +69,13 @@ export class UserAdminService {
             if (existing && existing._id.toString() !== userId) throw new HttpError(409, "Email already in use");
             updates.email = data.email;
         }
-        if (data.phone) updates.phone = sanitizeText(data.phone);
+        if (data.phone) {
+            const existingPhone = await userRepository.getUserByPhone(data.phone);
+            if (existingPhone && existingPhone._id.toString() !== userId) {
+                throw new HttpError(409, "Phone number already in use");
+            }
+            updates.phone = sanitizeText(data.phone);
+        }
 
         const updated = await userRepository.updateOneUser(userId, updates);
         logActivity("ADMIN_UPDATED_USER", { adminId, targetUserId: userId });

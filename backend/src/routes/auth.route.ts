@@ -15,6 +15,7 @@ router.post("/request-password-reset", loginRateLimiter, authController.requestP
 router.post("/reset-password", loginRateLimiter, authController.resetPassword);
 
 router.get("/whoami", authorizedMiddleware, authController.getProfile);
+router.put("/profile", authorizedMiddleware, authController.updateProfile);
 router.post("/totp/setup", authorizedMiddleware, authController.setupTotp);
 router.post("/totp/enable", authorizedMiddleware, authController.enableTotp);
 router.put("/change-password", authorizedMiddleware, authController.changePassword);
