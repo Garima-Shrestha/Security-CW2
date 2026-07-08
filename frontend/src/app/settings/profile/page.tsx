@@ -31,6 +31,17 @@ function ProfileSettingsContent() {
         defaultValues: { username: user?.username || "", email: user?.email || "", phone: user?.phone || "" },
     });
 
+    async function handleExport() {
+        const res = await api.get("/api/users/export", { responseType: "blob" });
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "shutter-my-data.json");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+
     async function onSubmit(values: ProfileFormValues) {
         setServerError(null);
         setSuccess(null);
@@ -125,6 +136,14 @@ function ProfileSettingsContent() {
                         className="w-full bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-2.5 text-sm font-semibold transition disabled:opacity-50"
                     >
                         {isSubmitting ? "Saving..." : "Save Changes"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleExport}
+                        className="w-full border border-[#252d42] text-[#c3c5d9] rounded-lg py-2.5 text-sm font-semibold transition hover:bg-[#131a2a]"
+                    >
+                        Export My Data
                     </button>
                     </div>
                 </form>
