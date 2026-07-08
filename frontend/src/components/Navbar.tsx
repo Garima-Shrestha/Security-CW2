@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Camera, User, ShieldCheck, KeyRound, LogOut, ChevronDown } from "lucide-react";
+import { User, ShieldCheck, KeyRound, LogOut, ChevronDown } from "lucide-react";
 
 const HIDDEN_ON = ["/login", "/register", "/forgot-password", "/reset-password"];
 
@@ -34,8 +34,8 @@ export default function Navbar() {
     return (
         <nav className="w-full bg-[#131313] border-b border-[#252525] px-6 py-4 grid grid-cols-3 items-center">
             <Link href="/equipment" className="flex items-center gap-2 justify-self-start">
-                <Camera size={20} className="text-[#a5c1fc]" />
-                <span className="font-semibold text-[#a5c1fc]">SHUTTER</span>
+                <span className="material-symbols-outlined text-3xl text-[#b7c4ff]" style={{ fontVariationSettings: "'FILL' 1" }}>camera</span>
+                <span className="text-3xl font-bold text-[#b7c4ff]">Shutter</span>
             </Link>
 
             {user.role === "admin" ? (

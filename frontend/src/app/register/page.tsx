@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import Image from "next/image";
-import { Camera, Eye, EyeOff, Check, X, ShieldCheck, Lock, Mail, User as UserIcon } from "lucide-react";
+import { Eye, EyeOff, Check, X, ShieldCheck, Lock, Mail, User as UserIcon } from "lucide-react";
 import api from "@/lib/axios";
 import { useAuth } from "@/hooks/useAuth";
 import { registerSchema, RegisterFormValues } from "@/lib/validation/auth.schema";
@@ -76,8 +76,8 @@ export default function RegisterPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#131313]/95 via-[#131313]/70 to-black/50" />
 
                 <div className="relative z-10 p-12 flex items-center gap-2 text-white">
-                    <Camera size={26} strokeWidth={1.5} />
-                    <span className="text-lg font-semibold tracking-tight text-[#a5c1fc]">SHUTTER</span>
+                    <span className="material-symbols-outlined text-3xl text-[#b7c4ff]" style={{ fontVariationSettings: "'FILL' 1" }}>camera</span>
+                    <span className="text-3xl font-bold text-[#b7c4ff]">Shutter</span>
                 </div>
 
                 <div className="relative z-10 p-12 space-y-4 text-white">
@@ -97,8 +97,8 @@ export default function RegisterPage() {
             <div className="flex items-center justify-center px-6 py-12 bg-[#131313]">
                 <div className="w-full max-w-sm space-y-8">
                     <div className="lg:hidden flex items-center gap-2 mb-4">
-                        <Camera size={24} strokeWidth={1.5} />
-                        <span className="text-lg font-semibold text-white">SHUTTER</span>
+                        <span className="material-symbols-outlined text-3xl text-[#b7c4ff]" style={{ fontVariationSettings: "'FILL' 1" }}>camera</span>
+                        <span className="text-3xl font-bold text-[#b7c4ff]">Shutter</span>
                     </div>
 
                     <div>
