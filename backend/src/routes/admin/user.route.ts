@@ -9,5 +9,8 @@ router.use(authorizedMiddleware);
 router.use(adminOnlyMiddleware);
 
 router.get("/", adminUserController.getAllUsers);
+router.post("/", adminUserController.createUser);
+router.put("/:id", adminUserController.updateUser);
+router.delete("/:id", adminUserController.deleteUser);
 
 export default router;

@@ -41,9 +41,32 @@ export type EnableTotpDto = z.infer<typeof EnableTotpDto>;
 
 export const UpdateUserDto = UserSchema.pick({
     username: true,
+    email: true,
+    phone: true,
     imageUrl: true,
 }).partial();
 export type UpdateUserDto = z.infer<typeof UpdateUserDto>;
+
+export const AdminCreateUserDto = z.object({
+    username: z.string().min(2).max(30),
+    email: z.string().email(),
+    phone: z.string().regex(/^\d{8,15}$/, "Phone must be 8-15 digits").optional(),
+    password: z.string()
+        .min(12, "Password must be at least 12 characters")
+        .max(64)
+        .regex(/[a-z]/, "Must contain a lowercase letter")
+        .regex(/[A-Z]/, "Must contain an uppercase letter")
+        .regex(/[0-9]/, "Must contain a number")
+        .regex(/[^a-zA-Z0-9]/, "Must contain a special character"),
+    });
+export type AdminCreateUserDto = z.infer<typeof AdminCreateUserDto>;
+
+export const AdminUpdateUserDto = z.object({
+    username: z.string().min(2).max(30).optional(),
+    email: z.string().email().optional(),
+    phone: z.string().regex(/^\d{8,15}$/, "Phone must be 8-15 digits").optional(),
+});
+export type AdminUpdateUserDto = z.infer<typeof AdminUpdateUserDto>;
 
 export const ChangePasswordDto = z.object({
     oldPassword: z.string().min(1),
