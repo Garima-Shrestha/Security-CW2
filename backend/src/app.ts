@@ -35,10 +35,11 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "https://js.hcaptcha.com", "https://newassets.hcaptcha.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://newassets.hcaptcha.com"],
             imgSrc: ["'self'", "data:", CLIENT_URL],
-            connectSrc: ["'self'", CLIENT_URL],
+            connectSrc: ["'self'", CLIENT_URL, "https://hcaptcha.com", "https://*.hcaptcha.com"],
+            frameSrc: ["https://newassets.hcaptcha.com", "https://hcaptcha.com"],
             objectSrc: ["'none'"],
             frameAncestors: ["'none'"],
             upgradeInsecureRequests: [],

@@ -22,7 +22,7 @@ export class AuthController {
         }
     }
 
-    // step 1 - email + password
+    // email + password
     async login(req: Request, res: Response) {
         try {
             const parsed = LoginUserDto.safeParse(req.body);
@@ -36,11 +36,15 @@ export class AuthController {
             }
             return res.status(200).json({ success: true, requiresTotp: false, token: result.token, data: result.user });
         } catch (error: any) {
-            return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
+            return res.status(error.statusCode || 500).json({
+                success: false,
+                message: error.message || "Internal Server Error",
+                captchaRequired: !!error.captchaRequired,
+            });
         }
     }
 
-    // step 2 - totp code
+    // totp code
     async verifyTotp(req: Request, res: Response) {
         try {
             const parsed = VerifyTotpDto.safeParse(req.body);

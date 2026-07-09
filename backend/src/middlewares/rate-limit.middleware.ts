@@ -3,7 +3,7 @@ import rateLimit from "express-rate-limit";
 // tighter limit on auth endpoints since these are the actual brute-force targets
 export const loginRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 15,
+    limit: process.env.NODE_ENV === "production" ? 15 : 100,
     message: { success: false, message: "Too many login attempts, please try again later" },
     standardHeaders: true,
     legacyHeaders: false,

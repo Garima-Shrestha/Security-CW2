@@ -9,7 +9,7 @@ interface AuthContextValue {
     token: string | null;
     isLoading: boolean;
     isInitializing: boolean;
-    loginStepOne: (email: string, password: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string; user?: User }>;
+    loginStepOne: (email: string, password: string, captchaToken?: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string; user?: User }>;
     loginStepTwo: (preAuthToken: string, code: string) => Promise<User>;
     logout: () => void;
     setUserAndToken: (user: User, token: string) => void;
@@ -44,10 +44,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("auth_user", JSON.stringify(u));
     }
 
-    async function loginStepOne(email: string, password: string) {
+    async function loginStepOne(email: string, password: string, captchaToken?: string) {
         setIsLoading(true);
         try {
-            const res = await api.post("/api/auth/login", { email, password });
+            const res = await api.post("/api/auth/login", { email, password, captchaToken });
             const { requiresTotp, token: accessToken, data, preAuthToken } = res.data;
 
             if (!requiresTotp && accessToken && data) {

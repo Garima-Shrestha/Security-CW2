@@ -23,6 +23,7 @@ export type RegisterUserDto = z.infer<typeof RegisterUserDto>;
 export const LoginUserDto = z.object({
     email: z.string().email(),
     password: z.string().min(1), // don't leak policy details on login form
+    captchaToken: z.string().optional(),
 });
 export type LoginUserDto = z.infer<typeof LoginUserDto>;
 

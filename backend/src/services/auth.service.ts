@@ -8,9 +8,10 @@ import { logActivity, logSecurityEvent } from "../config/logger";
 import { sanitizeText } from "../utils/sanitize";
 import { sendEmail } from "../config/email";
 import { RESET_TOKEN_EXPIRY, CLIENT_URL } from "../config";
-import { JWT_SECRET, JWT_EXPIRY, PRE_AUTH_TOKEN_EXPIRY, MAX_FAILED_ATTEMPTS, LOCKOUT_DURATION_MINUTES, PASSWORD_HISTORY_LIMIT,} from "../config";
+import { JWT_SECRET, JWT_EXPIRY, PRE_AUTH_TOKEN_EXPIRY, MAX_FAILED_ATTEMPTS, LOCKOUT_DURATION_MINUTES, PASSWORD_HISTORY_LIMIT, PASSWORD_EXPIRY_DAYS,} from "../config";
 import { hashUserAgent } from "../utils/device"; 
 import { encrypt, decrypt } from "../utils/encryption";
+import { verifyCaptcha } from "./captcha.service";
 
 let userRepository = new UserRepository();
 let totpService = new TotpService();
@@ -67,6 +68,18 @@ export class AuthService {
             throw new HttpError(429, `Account temporarily locked. Try again in ${minutesLeft} minute(s).`);
         }
 
+
+        // Require CAPTCHA after 3 failed attempts on this account
+        if (user.failedLoginAttempts >= 3) {
+            const captchaOk = await verifyCaptcha(data.captchaToken || "");
+            if (!captchaOk) {
+                const err: any = new HttpError(400, "CAPTCHA verification required");
+                err.captchaRequired = true;
+                throw err;
+            }
+        }
+
+
         const isPasswordValid = await bcryptjs.compare(data.password, user.password);
 
         if (!isPasswordValid) {
@@ -84,6 +97,17 @@ export class AuthService {
         // Clear failed attempts when password is correct
         await userRepository.resetFailedAttempts(user._id.toString());
         logActivity("LOGIN_SUCCESS", { userId: user._id.toString() });
+
+
+        // Enforce 90-day password expiry policy
+        const daysSinceChange = user.passwordChangedAt
+            ? (Date.now() - user.passwordChangedAt.getTime()) / (1000 * 60 * 60 * 24)
+            : Infinity;
+        if (daysSinceChange > PASSWORD_EXPIRY_DAYS) {
+            logSecurityEvent("PASSWORD_EXPIRED", { userId: user._id.toString() });
+            throw new HttpError(403, "Your password has expired. Please reset it to continue.");
+        }
+
 
         // If TOTP is not enabled, log the user in and prompt MFA setup
         if (!user.isTotpEnabled) {

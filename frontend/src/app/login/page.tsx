@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,10 @@ function LoginPageContent() {
     const [serverError, setServerError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [captchaRequired, setCaptchaRequired] = useState(false);
+    const captchaTokenRef = useRef<string | null>(null);
+    const captchaContainerRef = useRef<HTMLDivElement>(null);
+    const captchaWidgetId = useRef<string | null>(null);
 
     const credentialsForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -38,6 +42,28 @@ function LoginPageContent() {
         }
     }, [user, isInitializing, router]);
 
+    useEffect(() => {
+        if (!captchaRequired) return;
+
+        function tryRender() {
+            const hcaptcha = (window as any).hcaptcha;
+            if (!hcaptcha || !captchaContainerRef.current) {
+                setTimeout(tryRender, 200);
+                return;
+            }
+            if (captchaWidgetId.current !== null) return; // already rendered
+
+            captchaWidgetId.current = hcaptcha.render(captchaContainerRef.current, {
+                sitekey: "e7f0b744-d8b0-4732-b0a8-f2086638fc7e",
+                callback: (token: string) => {
+                    (window as any).__hcaptchaToken = token;
+                },
+            });
+        }
+
+        tryRender();
+    }, [captchaRequired]);
+
     if (isInitializing || user) {
         return null;
     }
@@ -46,7 +72,7 @@ function LoginPageContent() {
         setServerError(null);
         setIsSubmitting(true);
         try {
-            const result = await loginStepOne(values.email, values.password);
+            const result = await loginStepOne(values.email, values.password, (window as any).__hcaptchaToken || undefined);
             if (result.requiresTotp && result.preAuthToken) {
                 setPreAuthToken(result.preAuthToken);
                 setStep("mfa");
@@ -54,7 +80,18 @@ function LoginPageContent() {
                 router.push(result.user?.role === "admin" ? "/admin/users" : "/equipment");
             }
         } catch (err: any) {
-            setServerError(err?.response?.data?.message || "Login failed. Please try again.");
+            const message = err?.response?.data?.message;
+            setServerError(typeof message === "string" ? message : "Login failed. Please try again.");
+            if (err?.response?.data?.captchaRequired) setCaptchaRequired(true);
+            captchaTokenRef.current = null;
+            (window as any).__hcaptchaToken = undefined;
+            try {
+                if (captchaWidgetId.current !== null) {
+                    (window as any).hcaptcha?.reset(captchaWidgetId.current);
+                }
+            } catch {
+                // hcaptcha widget may not be mounted/loaded yet, ignore
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -169,8 +206,8 @@ function LoginPageContent() {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword((s) => !s)}
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
-                                            tabIndex={-1}
                                         >
                                             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                         </button>
@@ -190,9 +227,11 @@ function LoginPageContent() {
 
                                 {serverError && (
                                     <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
-                                        {serverError}
+                                        {typeof serverError === "string" ? serverError : "Something went wrong."}
                                     </div>
                                 )}
+
+                                {captchaRequired && <div ref={captchaContainerRef} />}
 
                                 <button
                                     type="submit"
