@@ -26,6 +26,16 @@ function AdminRentalsContent() {
 
     // return modal state
     const [returnTarget, setReturnTarget] = useState<Rental | null>(null);
+
+    useEffect(() => {
+        if (!returnTarget) return;
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setReturnTarget(null);
+        }
+        document.addEventListener("keydown", handleEscape);
+        return () => document.removeEventListener("keydown", handleEscape);
+    }, [returnTarget]);
+    
     const [deductionAmount, setDeductionAmount] = useState("0");
     const [deductionReason, setDeductionReason] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);

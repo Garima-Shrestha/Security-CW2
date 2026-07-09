@@ -19,6 +19,15 @@ function AdminCategoriesContent() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<EquipmentCategory | null>(null);
 
+    useEffect(() => {
+        if (!deleteTarget) return;
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setDeleteTarget(null);
+        }
+        document.addEventListener("keydown", handleEscape);
+        return () => document.removeEventListener("keydown", handleEscape);
+    }, [deleteTarget]);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);

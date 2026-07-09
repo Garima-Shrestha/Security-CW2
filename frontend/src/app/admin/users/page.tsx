@@ -22,6 +22,17 @@ function AdminUsersContent() {
     const [form, setForm] = useState({ username: "", email: "", phone: "", password: "", role: "user" as "admin" | "user" });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    useEffect(() => {
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key !== "Escape") return;
+            if (deleteTarget) setDeleteTarget(null);
+            else if (editTarget) setEditTarget(null);
+            else if (showAddModal) setShowAddModal(false);
+        }
+        document.addEventListener("keydown", handleEscape);
+        return () => document.removeEventListener("keydown", handleEscape);
+    }, [deleteTarget, editTarget, showAddModal]);
+
     function load() {
         setIsLoading(true);
         api
