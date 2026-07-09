@@ -230,7 +230,7 @@ function EditEquipmentContent() {
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
-                                            alt=""
+                                            alt={`${title || "Equipment"} photo`}
                                             className="w-20 h-20 rounded-lg object-cover border border-[#434656]"
                                         />
                                         <button

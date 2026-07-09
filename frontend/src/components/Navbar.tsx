@@ -20,8 +20,15 @@ export default function Navbar() {
                 setOpen(false);
             }
         }
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setOpen(false);
+        }
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscape);
+        };
     }, []);
 
     if (!user || HIDDEN_ON.includes(pathname)) return null;
@@ -54,6 +61,9 @@ export default function Navbar() {
             <div className="relative justify-self-end" ref={menuRef}>
                 <button
                     onClick={() => setOpen((o) => !o)}
+                    aria-expanded={open}
+                    aria-haspopup="true"
+                    aria-label="User menu"
                     className="flex items-center gap-2 text-sm text-[#e5e2e1] hover:text-[#6495ED] transition"
                 >
                     <User size={18} />
@@ -62,7 +72,7 @@ export default function Navbar() {
                 </button>
 
                 {open && (
-                    <div className="absolute right-0 mt-2 w-48 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg shadow-lg py-1 z-50">
+                    <div role="menu" className="absolute right-0 mt-2 w-48 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg shadow-lg py-1 z-50">
                         <Link
                             href="/settings/profile"
                             onClick={() => setOpen(false)}

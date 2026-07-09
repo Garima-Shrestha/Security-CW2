@@ -178,12 +178,12 @@ export default function RegisterPage() {
                                     placeholder="••••••••••••"
                                 />
                                 <button
-                                    type="button"
-                                    onClick={() => setShowPassword((s) => !s)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
-                                    tabIndex={-1}
-                                >
-                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        type="button"
+                                        onClick={() => setShowPassword((s) => !s)}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                    >
+                                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
                             </div>
 

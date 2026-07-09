@@ -91,7 +91,7 @@ function EquipmentDetailContent() {
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
-                                        alt=""
+                                        alt={`${equipment.title} thumbnail ${idx + 1}`}
                                         className="w-full h-full object-cover"
                                     />
                                 </button>
