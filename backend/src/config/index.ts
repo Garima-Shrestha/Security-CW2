@@ -58,3 +58,10 @@ export const TOTP_ISSUER: string = process.env.TOTP_ISSUER || 'Shutter';
 // Password policy
 export const PASSWORD_EXPIRY_DAYS: number = 90;
 export const PASSWORD_HISTORY_LIMIT: number = 5;
+
+//  CAPTCHA after repeated failed logins
+export const HCAPTCHA_SECRET: string = process.env.HCAPTCHA_SECRET || '';
+
+
+// Real-time security alerting
+export const ADMIN_ALERT_EMAIL: string = process.env.ADMIN_ALERT_EMAIL || '';
