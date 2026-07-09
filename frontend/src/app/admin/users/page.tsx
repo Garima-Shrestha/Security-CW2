@@ -128,7 +128,7 @@ function AdminUsersContent() {
                 </div>
 
                 <div className="relative max-w-sm">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                     <input
                         value={searchTerm}
                         onChange={(e) => { setPage(1); setSearchTerm(e.target.value); }}
@@ -141,14 +141,14 @@ function AdminUsersContent() {
                 {success && <div className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3">{success}</div>}
 
                 {isLoading ? (
-                    <p className="text-[#8d90a2]">Loading...</p>
+                    <p className="text-[#a0a3b5]">Loading...</p>
                 ) : users.length === 0 ? (
-                    <p className="text-[#8d90a2]">No users found.</p>
+                    <p className="text-[#a0a3b5]">No users found.</p>
                 ) : (
                     <div className="overflow-x-auto rounded-xl border border-[#2a2a2a]">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="bg-[#1a1a1a] text-left text-[#8d90a2]">
+                                <tr className="bg-[#1a1a1a] text-left text-[#a0a3b5]">
                                     <th className="px-4 py-3 font-medium">Username</th>
                                     <th className="px-4 py-3 font-medium">Email</th>
                                     <th className="px-4 py-3 font-medium">Phone</th>
@@ -176,14 +176,14 @@ function AdminUsersContent() {
                                                 {u.isTotpEnabled ? "Enabled" : "Disabled"}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-3 text-[#8d90a2]">{new Date(u.createdAt).toLocaleDateString()}</td>
+                                        <td className="px-4 py-3 text-[#a0a3b5]">{new Date(u.createdAt).toLocaleDateString()}</td>
                                         <td className="px-4 py-3">
                                             {u.role !== "admin" && (
                                                 <div className="flex gap-3">
-                                                    <button onClick={() => openEdit(u)} className="text-[#8d90a2] hover:text-[#0052ff]">
+                                                    <button onClick={() => openEdit(u)} className="text-[#a0a3b5] hover:text-[#0052ff]">
                                                         <Pencil size={16} />
                                                     </button>
-                                                    <button onClick={() => setDeleteTarget(u)} className="text-[#8d90a2] hover:text-red-400">
+                                                    <button onClick={() => setDeleteTarget(u)} className="text-[#a0a3b5] hover:text-red-400">
                                                         <Trash2 size={16} />
                                                     </button>
                                                 </div>
@@ -199,7 +199,7 @@ function AdminUsersContent() {
                 {totalPages > 1 && (
                     <div className="flex items-center gap-3 pt-2">
                         <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="px-3 py-1.5 text-sm rounded-lg border border-[#434656] text-[#e5e2e1] disabled:opacity-40">Prev</button>
-                        <span className="text-sm text-[#8d90a2]">Page {page} of {totalPages}</span>
+                        <span className="text-sm text-[#a0a3b5]">Page {page} of {totalPages}</span>
                         <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="px-3 py-1.5 text-sm rounded-lg border border-[#434656] text-[#e5e2e1] disabled:opacity-40">Next</button>
                     </div>
                 )}
@@ -211,24 +211,27 @@ function AdminUsersContent() {
                         <h3 className="text-white font-semibold">{editTarget ? "Edit User" : "Add User"}</h3>
 
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Username</label>
+                            <label htmlFor="user-modal-username" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Username</label>
                             <input
+                                id="user-modal-username"
                                 value={form.username}
                                 onChange={(e) => setForm({ ...form, username: e.target.value })}
                                 className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0052ff]"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Email</label>
+                            <label htmlFor="user-modal-email" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Email</label>
                             <input
+                                id="user-modal-email"
                                 value={form.email}
                                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                                 className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0052ff]"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Phone</label>
+                            <label htmlFor="user-modal-phone" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Phone</label>
                             <input
+                                id="user-modal-phone"
                                 value={form.phone}
                                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                                 className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0052ff]"
@@ -237,8 +240,9 @@ function AdminUsersContent() {
 
                         {showAddModal && (
                             <div>
-                                <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Password</label>
+                                <label htmlFor="user-modal-password" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Password</label>
                                 <input
+                                    id="user-modal-password"
                                     type="password"
                                     value={form.password}
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -272,7 +276,7 @@ function AdminUsersContent() {
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center px-6 z-50">
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 max-w-sm w-full space-y-4">
                         <h3 className="text-white font-semibold">Delete user?</h3>
-                        <p className="text-sm text-[#8d90a2]">
+                        <p className="text-sm text-[#a0a3b5]">
                             Are you sure you want to delete <span className="text-[#e5e2e1]">{deleteTarget.username}</span>? This cannot be undone.
                         </p>
                         <div className="flex gap-3">

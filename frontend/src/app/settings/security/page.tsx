@@ -98,14 +98,14 @@ function TotpSetupContent() {
 
                 {qrCode && (
                     <div className="space-y-4">
-                        <p className="text-sm text-[#8d90a2]">
+                        <p className="text-sm text-[#a0a3b5]">
                             Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.), then enter the 6-digit code it shows.
                         </p>
                         <div className="bg-white p-4 rounded-lg w-fit mx-auto">
                             <Image src={qrCode} alt="TOTP QR Code" width={200} height={200} unoptimized />
                         </div>
                         {secret && (
-                            <p className="text-xs text-[#8d90a2] text-center break-all">
+                            <p className="text-xs text-[#a0a3b5] text-center break-all">
                                 Manual entry key: <span className="text-[#e5e2e1]">{secret}</span>
                             </p>
                         )}
@@ -117,7 +117,7 @@ function TotpSetupContent() {
                                 maxLength={6}
                                 autoComplete="one-time-code"
                                 {...register("code")}
-                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-center text-lg tracking-[0.5em] font-medium focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-center text-lg tracking-[0.5em] font-medium focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                 placeholder="000000"
                             />
                             {errors.code && <p className="text-red-600 text-xs">{errors.code.message}</p>}

@@ -76,9 +76,9 @@ function MyRentalsContent() {
                 )}
 
                 {isLoading ? (
-                    <p className="text-[#8d90a2]">Loading...</p>
+                    <p className="text-[#a0a3b5]">Loading...</p>
                 ) : rentals.length === 0 ? (
-                    <p className="text-[#8d90a2]">No rentals found.</p>
+                    <p className="text-[#a0a3b5]">No rentals found.</p>
                 ) : (
                     <div className="space-y-3">
                         {rentals.map((r) => (
@@ -99,7 +99,7 @@ function MyRentalsContent() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-[#e5e2e1] font-medium truncate">{r.equipment?.title}</p>
-                                    <p className="text-xs text-[#8d90a2]">
+                                    <p className="text-xs text-[#a0a3b5]">
                                         {new Date(r.startDate).toLocaleDateString()} - {new Date(r.endDate).toLocaleDateString()}
                                     </p>
                                     <p className="text-sm text-[#b7c4ff] font-semibold mt-1">
@@ -123,7 +123,7 @@ function MyRentalsContent() {
                         >
                             Prev
                         </button>
-                        <span className="text-sm text-[#8d90a2]">Page {page} of {totalPages}</span>
+                        <span className="text-sm text-[#a0a3b5]">Page {page} of {totalPages}</span>
                         <button
                             disabled={page >= totalPages}
                             onClick={() => setPage((p) => p + 1)}

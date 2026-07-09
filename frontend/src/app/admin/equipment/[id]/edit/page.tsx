@@ -107,7 +107,7 @@ function EditEquipmentContent() {
     }
 
     if (isLoading) {
-        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#8d90a2]">Loading...</div>;
+        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#a0a3b5]">Loading...</div>;
     }
 
     return (
@@ -117,8 +117,9 @@ function EditEquipmentContent() {
 
                 <form onSubmit={onSubmit} className="space-y-4 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Title</label>
+                        <label htmlFor="edit-equipment-title" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Title</label>
                         <input
+                            id="edit-equipment-title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
@@ -129,8 +130,9 @@ function EditEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description</label>
+                        <label htmlFor="edit-equipment-description" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description</label>
                         <textarea
+                            id="edit-equipment-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             required
@@ -141,8 +143,9 @@ function EditEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Category</label>
+                        <label htmlFor="edit-equipment-category" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Category</label>
                         <select
+                            id="edit-equipment-category"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             required
@@ -157,8 +160,9 @@ function EditEquipmentContent() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Brand</label>
+                            <label htmlFor="edit-equipment-brand" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Brand</label>
                             <input
+                                id="edit-equipment-brand"
                                 value={brand}
                                 onChange={(e) => setBrand(e.target.value)}
                                 required
@@ -167,8 +171,9 @@ function EditEquipmentContent() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Model</label>
+                            <label htmlFor="edit-equipment-model" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Model</label>
                             <input
+                                id="edit-equipment-model"
                                 value={model}
                                 onChange={(e) => setModel(e.target.value)}
                                 required
@@ -179,8 +184,9 @@ function EditEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Condition</label>
+                        <label htmlFor="edit-equipment-condition" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Condition</label>
                         <select
+                            id="edit-equipment-condition"
                             value={condition}
                             onChange={(e) => setCondition(e.target.value)}
                             className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff]"
@@ -194,8 +200,9 @@ function EditEquipmentContent() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Daily rate (Rs.)</label>
+                            <label htmlFor="edit-equipment-daily-rate" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Daily rate (Rs.)</label>
                             <input
+                                id="edit-equipment-daily-rate"
                                 type="number"
                                 min="1"
                                 step="0.01"
@@ -206,8 +213,9 @@ function EditEquipmentContent() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deposit (Rs.)</label>
+                            <label htmlFor="edit-equipment-deposit" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deposit (Rs.)</label>
                             <input
+                                id="edit-equipment-deposit"
                                 type="number"
                                 min="0"
                                 step="0.01"
@@ -220,9 +228,9 @@ function EditEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Current Images</label>
+                        <label id="edit-current-images-label" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Current Images</label>
                         {images.length === 0 ? (
-                            <p className="text-xs text-[#8d90a2]">No images</p>
+                            <p className="text-xs text-[#a0a3b5]">No images</p>
                         ) : (
                             <div className="flex gap-2 flex-wrap">
                                 {images.map((img) => (
@@ -256,7 +264,7 @@ function EditEquipmentContent() {
                             multiple
                             onChange={(e) => setNewImages(e.target.files)}
                             disabled={images.length >= 6}
-                            className="w-full text-sm text-[#8d90a2] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#0052ff] file:text-white file:text-sm disabled:opacity-50"
+                            className="w-full text-sm text-[#a0a3b5] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#0052ff] file:text-white file:text-sm disabled:opacity-50"
                         />
                     </div>
 

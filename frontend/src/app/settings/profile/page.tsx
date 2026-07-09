@@ -66,7 +66,7 @@ function ProfileSettingsContent() {
             <div className="w-full max-w-md space-y-6">
                 <div className="text-center space-y-1">
                     <h1 className="text-2xl font-semibold text-white">Profile Settings</h1>
-                    <p className="text-sm text-[#8d90a2]">Manage your account credentials and security</p>
+                    <p className="text-sm text-[#a0a3b5]">Manage your account credentials and security</p>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-[#0f1420] border border-[#1e2536] rounded-xl overflow-hidden">
@@ -79,7 +79,7 @@ function ProfileSettingsContent() {
                             <p className={`text-sm font-semibold ${user?.isTotpEnabled ? "text-emerald-500" : "text-red-600"}`}>
                                 MFA {user?.isTotpEnabled ? "enabled" : "disabled"}
                             </p>
-                            <p className="text-xs text-[#8d90a2] mt-0.5">
+                            <p className="text-xs text-[#a0a3b5] mt-0.5">
                                 Enable multi-factor authentication to secure your account.
                             </p>
                         </div>
@@ -88,7 +88,7 @@ function ProfileSettingsContent() {
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Display Name</label>
                         <div className="relative">
-                            <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                            <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                             <input
                                 id="username"
                                 type="text"
@@ -102,7 +102,7 @@ function ProfileSettingsContent() {
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Email</label>
                         <div className="relative">
-                            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                             <input
                                 id="email"
                                 type="email"
@@ -116,7 +116,7 @@ function ProfileSettingsContent() {
                     <div>
                         <label htmlFor="phone" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Phone Number</label>
                         <div className="relative">
-                            <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                            <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                             <input
                                 id="phone"
                                 type="tel"

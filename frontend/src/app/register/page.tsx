@@ -113,13 +113,13 @@ export default function RegisterPage() {
                                 Full Name
                             </label>
                             <div className="relative">
-                                <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                 <input
                                     id="username"
                                     type="text"
                                     autoComplete="off"
                                     {...register("username")}
-                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                     placeholder="Ram Thapa"
                                 />
                             </div>
@@ -131,13 +131,13 @@ export default function RegisterPage() {
                                 Email Address
                             </label>
                             <div className="relative">
-                                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                 <input
                                     id="email"
                                     type="email"
                                     autoComplete="off"
                                     {...register("email")}
-                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                     placeholder="example@gmail.com"
                                 />
                             </div>
@@ -155,7 +155,7 @@ export default function RegisterPage() {
                                 type="tel"
                                 autoComplete="off"
                                 {...register("phone")}
-                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                 placeholder="98XXXXXXXX"
                             />
                             {errors.phone && (
@@ -168,20 +168,20 @@ export default function RegisterPage() {
                                 Password
                             </label>
                             <div className="relative">
-                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     autoComplete="new-password"
                                     {...register("password")}
-                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                     placeholder="••••••••••••"
                                 />
                                 <button
                                         type="button"
                                         onClick={() => setShowPassword((s) => !s)}
                                         aria-label={showPassword ? "Hide password" : "Show password"}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a0a3b5] hover:text-[#e5e2e1]"
                                     >
                                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
@@ -196,9 +196,9 @@ export default function RegisterPage() {
                                                 {passed ? (
                                                     <Check size={12} className="text-emerald-400 shrink-0" />
                                                 ) : (
-                                                    <X size={12} className="text-[#8d90a2] shrink-0" />
+                                                    <X size={12} className="text-[#a0a3b5] shrink-0" />
                                                 )}
-                                                <span className={passed ? "text-[#c3c5d9]" : "text-[#8d90a2]"}>
+                                                <span className={passed ? "text-[#c3c5d9]" : "text-[#a0a3b5]"}>
                                                     {rule.label}
                                                 </span>
                                             </div>
@@ -213,19 +213,19 @@ export default function RegisterPage() {
                                 Confirm password
                             </label>
                             <div className="relative">
-                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                 <input
                                     id="confirmPassword"
                                     type={showConfirm ? "text" : "password"}
                                     autoComplete="new-password"
                                     {...register("confirmPassword")}
-                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                    className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                     placeholder="••••••••••••"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirm((s) => !s)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a0a3b5] hover:text-[#e5e2e1]"
                                     tabIndex={-1}
                                 >
                                     {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -251,7 +251,7 @@ export default function RegisterPage() {
                         </button>
 
                         <div className="text-center pt-2">
-                            <p className="text-sm text-[#8d90a2]">
+                            <p className="text-sm text-[#a0a3b5]">
                                 Already have one?{" "}
                                 <Link href="/login" className="text-[#b7c4ff] font-medium hover:text-white underline underline-offset-2">
                                     Log in

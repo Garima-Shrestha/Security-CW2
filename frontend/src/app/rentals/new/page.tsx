@@ -59,7 +59,7 @@ function NewRentalContent() {
     }
 
     if (isLoading) {
-        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#8d90a2]">Loading...</div>;
+        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#a0a3b5]">Loading...</div>;
     }
 
     if (error && !equipment) {
@@ -78,7 +78,7 @@ function NewRentalContent() {
             <div className="max-w-lg mx-auto space-y-6">
                 <button
                     onClick={() => router.back()}
-                    className="flex items-center gap-1 text-sm text-[#8d90a2] hover:text-[#e5e2e1]"
+                    className="flex items-center gap-1 text-sm text-[#a0a3b5] hover:text-[#e5e2e1]"
                 >
                     <ArrowLeft size={14} /> Back
                 </button>
@@ -119,15 +119,15 @@ function NewRentalContent() {
 
                     {totalDays > 0 && equipment && (
                         <div className="border-t border-[#2a2a2a] pt-4 space-y-2 text-sm">
-                            <div className="flex justify-between text-[#8d90a2]">
+                            <div className="flex justify-between text-[#a0a3b5]">
                                 <span>Duration</span>
                                 <span className="text-[#e5e2e1]">{totalDays} day(s)</span>
                             </div>
-                            <div className="flex justify-between text-[#8d90a2]">
+                            <div className="flex justify-between text-[#a0a3b5]">
                                 <span>Rental amount</span>
                                 <span className="text-[#e5e2e1]">Rs. {rentalAmount}</span>
                             </div>
-                            <div className="flex justify-between text-[#8d90a2]">
+                            <div className="flex justify-between text-[#a0a3b5]">
                                 <span>Deposit (refundable)</span>
                                 <span className="text-[#e5e2e1]">Rs. {equipment.depositAmount}</span>
                             </div>

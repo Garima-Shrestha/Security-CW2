@@ -35,7 +35,7 @@ export default function Navbar() {
 
     const navLinkClass = (path: string) =>
         `pb-1 border-b-2 font-medium transition ${
-            pathname === path ? "text-[#60a5fa] border-[#60a5fa]" : "text-[#8d90a2] border-transparent hover:text-[#e5e2e1]"
+            pathname === path ? "text-[#60a5fa] border-[#60a5fa]" : "text-[#a0a3b5] border-transparent hover:text-[#e5e2e1]"
         }`;
 
     return (

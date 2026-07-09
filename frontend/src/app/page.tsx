@@ -123,7 +123,7 @@ export default function Home() {
           </div>
           <div className="relative z-20 w-full max-w-[1440px] mx-auto px-8">
             <div className="max-w-2xl space-y-8">
-              <p className="text-xs uppercase tracking-widest text-[#8d90a2] font-medium">
+              <p className="text-xs uppercase tracking-widest text-[#a0a3b5] font-medium">
                 Professional gear, on demand
               </p>
               <h1 className="text-5xl leading-tight text-[#e5e2e1] font-bold" style={geistSans}>

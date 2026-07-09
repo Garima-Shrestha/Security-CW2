@@ -71,7 +71,7 @@ function AdminEquipmentContent() {
                 </div>
 
                 <div className="relative max-w-sm">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                     <input
                         value={searchTerm}
                         onChange={(e) => {
@@ -90,14 +90,14 @@ function AdminEquipmentContent() {
                 )}
 
                 {isLoading ? (
-                    <p className="text-[#8d90a2]">Loading...</p>
+                    <p className="text-[#a0a3b5]">Loading...</p>
                 ) : equipment.length === 0 ? (
-                    <p className="text-[#8d90a2]">No equipment found.</p>
+                    <p className="text-[#a0a3b5]">No equipment found.</p>
                 ) : (
                     <div className="overflow-x-auto rounded-xl border border-[#2a2a2a]">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="bg-[#1a1a1a] text-left text-[#8d90a2]">
+                                <tr className="bg-[#1a1a1a] text-left text-[#a0a3b5]">
                                     <th className="px-4 py-3 font-medium">Image</th>
                                     <th className="px-4 py-3 font-medium">Title</th>
                                     <th className="px-4 py-3 font-medium">Category</th>
@@ -139,10 +139,10 @@ function AdminEquipmentContent() {
                                         </td>
                                         <td className="px-4 py-3">
                                             <div className="flex gap-3">
-                                                <Link href={`/admin/equipment/${item._id}/edit`} className="text-[#8d90a2] hover:text-[#0052ff]">
+                                                <Link href={`/admin/equipment/${item._id}/edit`} className="text-[#a0a3b5] hover:text-[#0052ff]">
                                                     <Pencil size={16} />
                                                 </Link>
-                                                <button onClick={() => setDeleteTarget(item)} className="text-[#8d90a2] hover:text-red-400">
+                                                <button onClick={() => setDeleteTarget(item)} className="text-[#a0a3b5] hover:text-red-400">
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>
@@ -163,7 +163,7 @@ function AdminEquipmentContent() {
                         >
                             Prev
                         </button>
-                        <span className="text-sm text-[#8d90a2]">Page {page} of {totalPages}</span>
+                        <span className="text-sm text-[#a0a3b5]">Page {page} of {totalPages}</span>
                         <button
                             disabled={page >= totalPages}
                             onClick={() => setPage((p) => p + 1)}
@@ -179,7 +179,7 @@ function AdminEquipmentContent() {
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center px-6 z-50">
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 max-w-sm w-full space-y-4">
                         <h3 className="text-white font-semibold">Delete equipment?</h3>
-                        <p className="text-sm text-[#8d90a2]">
+                        <p className="text-sm text-[#a0a3b5]">
                             Are you sure you want to delete <span className="text-[#e5e2e1]">{deleteTarget.title}</span>? This cannot be undone.
                         </p>
                         <div className="flex gap-3">

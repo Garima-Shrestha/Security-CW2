@@ -35,7 +35,7 @@ function AdminRentalsContent() {
         document.addEventListener("keydown", handleEscape);
         return () => document.removeEventListener("keydown", handleEscape);
     }, [returnTarget]);
-    
+
     const [deductionAmount, setDeductionAmount] = useState("0");
     const [deductionReason, setDeductionReason] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
@@ -135,14 +135,14 @@ function AdminRentalsContent() {
                 )}
 
                 {isLoading ? (
-                    <p className="text-[#8d90a2]">Loading...</p>
+                    <p className="text-[#a0a3b5]">Loading...</p>
                 ) : rentals.length === 0 ? (
-                    <p className="text-[#8d90a2]">No rentals found.</p>
+                    <p className="text-[#a0a3b5]">No rentals found.</p>
                 ) : (
                     <div className="overflow-x-auto rounded-xl border border-[#2a2a2a]">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="bg-[#1a1a1a] text-left text-[#8d90a2]">
+                                <tr className="bg-[#1a1a1a] text-left text-[#a0a3b5]">
                                     <th className="px-4 py-3 font-medium">Equipment</th>
                                     <th className="px-4 py-3 font-medium">Dates</th>
                                     <th className="px-4 py-3 font-medium">Total</th>
@@ -205,7 +205,7 @@ function AdminRentalsContent() {
                         >
                             Prev
                         </button>
-                        <span className="text-sm text-[#8d90a2]">Page {page} of {totalPages}</span>
+                        <span className="text-sm text-[#a0a3b5]">Page {page} of {totalPages}</span>
                         <button
                             disabled={page >= totalPages}
                             onClick={() => setPage((p) => p + 1)}
@@ -221,13 +221,14 @@ function AdminRentalsContent() {
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center px-6 z-50">
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 max-w-sm w-full space-y-4">
                         <h3 className="text-white font-semibold">Process Return</h3>
-                        <p className="text-sm text-[#8d90a2]">
+                        <p className="text-sm text-[#a0a3b5]">
                             {returnTarget.equipment?.title} — deposit Rs. {returnTarget.depositAmount}
                         </p>
 
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deduction Amount</label>
+                            <label htmlFor="return-deduction-amount" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deduction Amount</label>
                             <input
+                                id="return-deduction-amount"
                                 type="number"
                                 min="0"
                                 max={returnTarget.depositAmount}
@@ -239,10 +240,11 @@ function AdminRentalsContent() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
+                            <label htmlFor="return-deduction-reason" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">
                                 Reason {Number(deductionAmount) > 0 && "(required)"}
                             </label>
                             <textarea
+                                id="return-deduction-reason"
                                 value={deductionReason}
                                 onChange={(e) => setDeductionReason(e.target.value)}
                                 maxLength={500}

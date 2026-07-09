@@ -48,7 +48,7 @@ function EquipmentListContent() {
                 <h1 className="text-2xl font-semibold text-white">Browse Equipment</h1>
 
                 <div className="relative max-w-md">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                     <input
                         value={searchTerm}
                         onChange={(e) => {
@@ -56,7 +56,7 @@ function EquipmentListContent() {
                             setSearchTerm(e.target.value);
                         }}
                         placeholder="Search by title, brand, model..."
-                        className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                        className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                     />
                 </div>
 
@@ -67,9 +67,9 @@ function EquipmentListContent() {
                 )}
 
                 {isLoading ? (
-                    <p className="text-[#8d90a2]">Loading...</p>
+                    <p className="text-[#a0a3b5]">Loading...</p>
                 ) : equipment.length === 0 ? (
-                    <p className="text-[#8d90a2]">No equipment found.</p>
+                    <p className="text-[#a0a3b5]">No equipment found.</p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {equipment.map((item) => (
@@ -90,7 +90,7 @@ function EquipmentListContent() {
                                 </div>
                                 <div className="p-4 space-y-1">
                                     <h3 className="text-[#e5e2e1] font-medium">{item.title}</h3>
-                                    <p className="text-xs text-[#8d90a2]">
+                                    <p className="text-xs text-[#a0a3b5]">
                                         {item.brand} · {item.model} · {item.condition}
                                     </p>
                                     <p className="text-sm text-[#0052ff] font-semibold">
@@ -111,7 +111,7 @@ function EquipmentListContent() {
                         >
                             Prev
                         </button>
-                        <span className="text-sm text-[#8d90a2]">
+                        <span className="text-sm text-[#a0a3b5]">
                             Page {page} of {totalPages}
                         </span>
                         <button

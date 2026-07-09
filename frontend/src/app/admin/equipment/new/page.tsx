@@ -83,8 +83,9 @@ function NewEquipmentContent() {
                     )}
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Title</label>
+                        <label htmlFor="equipment-title" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Title</label>
                         <input
+                            id="equipment-title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
@@ -96,8 +97,9 @@ function NewEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description</label>
+                        <label htmlFor="equipment-description" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description</label>
                         <textarea
+                            id="equipment-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             required
@@ -108,8 +110,9 @@ function NewEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Category</label>
+                        <label htmlFor="equipment-category" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Category</label>
                         <select
+                            id="equipment-category"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             required
@@ -121,7 +124,7 @@ function NewEquipmentContent() {
                             ))}
                         </select>
                         {categories.length === 0 && (
-                            <p className="text-xs text-[#8d90a2] mt-1">
+                            <p className="text-xs text-[#a0a3b5] mt-1">
                                 No categories yet, create one at /admin/categories first.
                             </p>
                         )}
@@ -129,8 +132,9 @@ function NewEquipmentContent() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Brand</label>
+                            <label htmlFor="equipment-brand" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Brand</label>
                             <input
+                                id="equipment-brand"
                                 value={brand}
                                 onChange={(e) => setBrand(e.target.value)}
                                 required
@@ -140,8 +144,9 @@ function NewEquipmentContent() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Model</label>
+                            <label htmlFor="equipment-model" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Model</label>
                             <input
+                                id="equipment-model"
                                 value={model}
                                 onChange={(e) => setModel(e.target.value)}
                                 required
@@ -153,8 +158,9 @@ function NewEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Condition</label>
+                        <label htmlFor="equipment-condition" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Condition</label>
                         <select
+                            id="equipment-condition"
                             value={condition}
                             onChange={(e) => setCondition(e.target.value)}
                             className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff]"
@@ -168,8 +174,9 @@ function NewEquipmentContent() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Daily rate (Rs.)</label>
+                            <label htmlFor="equipment-daily-rate" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Daily rate (Rs.)</label>
                             <input
+                                id="equipment-daily-rate"
                                 type="number"
                                 min="1"
                                 step="0.01"
@@ -180,8 +187,9 @@ function NewEquipmentContent() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deposit (Rs.)</label>
+                            <label htmlFor="equipment-deposit" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Deposit (Rs.)</label>
                             <input
+                                id="equipment-deposit"
                                 type="number"
                                 min="0"
                                 step="0.01"
@@ -194,7 +202,7 @@ function NewEquipmentContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-3">
+                        <label id="equipment-media-label" className="block text-sm font-medium text-[#e5e2e1] mb-3">
                             EQUIPMENT MEDIA PORTFOLIO
                         </label>
                         
@@ -209,17 +217,17 @@ function NewEquipmentContent() {
                             }}
                         >
                             <div className="mx-auto w-12 h-12 bg-[#2a2a2a] rounded-xl flex items-center justify-center mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#8d90a2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#a0a3b5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903 5 5 0 0110.025 0 4 4 0 01-.88 7.903M12 19v-7" />
                                 </svg>
                             </div>
                             
                             <p className="text-white text-lg font-medium">Drag &amp; drop equipment photos here</p>
-                            <p className="text-[#8d90a2] text-sm mt-1">or click to browse local storage</p>
+                            <p className="text-[#a0a3b5] text-sm mt-1">or click to browse local storage</p>
                             
                             <div className="flex justify-center gap-2 mt-6">
-                                <span className="text-xs bg-[#2a2a2a] text-[#8d90a2] px-3 py-1 rounded-full">MAX 6 FILES</span>
-                                <span className="text-xs bg-[#2a2a2a] text-[#8d90a2] px-3 py-1 rounded-full">WEBP/JPG/PNG</span>
+                                <span className="text-xs bg-[#2a2a2a] text-[#a0a3b5] px-3 py-1 rounded-full">MAX 6 FILES</span>
+                                <span className="text-xs bg-[#2a2a2a] text-[#a0a3b5] px-3 py-1 rounded-full">WEBP/JPG/PNG</span>
                             </div>
 
                             <input
@@ -234,7 +242,7 @@ function NewEquipmentContent() {
                         </div>
 
                         {images && images.length > 0 && (
-                            <p className="text-[#8d90a2] text-sm mt-3 text-center">
+                            <p className="text-[#a0a3b5] text-sm mt-3 text-center">
                                 {images.length} file(s) selected
                             </p>
                         )}

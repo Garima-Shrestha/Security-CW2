@@ -42,7 +42,7 @@ function EquipmentDetailContent() {
     }, [id]);
 
     if (isLoading) {
-        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#8d90a2]">Loading...</div>;
+        return <div className="min-h-screen bg-[#131313] flex items-center justify-center text-[#a0a3b5]">Loading...</div>;
     }
 
     if (error || !equipment) {
@@ -61,7 +61,7 @@ function EquipmentDetailContent() {
             <div className="max-w-6xl mx-auto space-y-6">
                 <button
                     onClick={() => router.push("/equipment")}
-                    className="flex items-center gap-1 text-sm text-[#8d90a2] hover:text-[#e5e2e1]"
+                    className="flex items-center gap-1 text-sm text-[#a0a3b5] hover:text-[#e5e2e1]"
                 >
                     <ArrowLeft size={14} /> Back
                 </button>
@@ -105,25 +105,25 @@ function EquipmentDetailContent() {
 
                         <div className="grid grid-cols-4 gap-4 border-t border-b border-[#2a2a2a] py-4">
                             <div>
-                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Brand</p>
+                                <p className="text-xs text-[#a0a3b5] uppercase tracking-wide">Brand</p>
                                 <p className="text-[#e5e2e1] font-medium mt-1">{equipment.brand}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Model</p>
+                                <p className="text-xs text-[#a0a3b5] uppercase tracking-wide">Model</p>
                                 <p className="text-[#e5e2e1] font-medium mt-1">{equipment.model}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Category</p>
+                                <p className="text-xs text-[#a0a3b5] uppercase tracking-wide">Category</p>
                                 <p className="text-[#e5e2e1] font-medium mt-1">{equipment.category?.name}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Condition</p>
+                                <p className="text-xs text-[#a0a3b5] uppercase tracking-wide">Condition</p>
                                 <p className="text-[#0052ff] font-medium mt-1 capitalize">{equipment.condition}</p>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <h3 className="text-xs font-medium text-[#8d90a2] uppercase tracking-wide">Description</h3>
+                            <h3 className="text-xs font-medium text-[#a0a3b5] uppercase tracking-wide">Description</h3>
                             <p className="text-[#c3c5d9] text-sm leading-relaxed">{equipment.description}</p>
                         </div>
 
@@ -131,7 +131,7 @@ function EquipmentDetailContent() {
                             <div className="space-y-1">
                                 <h3 className="text-sm font-medium text-[#e5e2e1]">Specifications</h3>
                                 {Object.entries(equipment.specs).map(([key, value]) => (
-                                    <div key={key} className="flex justify-between text-sm text-[#8d90a2] border-b border-[#2a2a2a] py-1">
+                                    <div key={key} className="flex justify-between text-sm text-[#a0a3b5] border-b border-[#2a2a2a] py-1">
                                         <span>{key}</span>
                                         <span className="text-[#c3c5d9]">{value}</span>
                                     </div>
@@ -142,19 +142,19 @@ function EquipmentDetailContent() {
 
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 space-y-4 h-fit">
                         <div>
-                            <p className="text-xs text-[#8d90a2] uppercase tracking-wide">Daily Rate</p>
+                            <p className="text-xs text-[#a0a3b5] uppercase tracking-wide">Daily Rate</p>
                             <p className="text-2xl font-semibold text-[#b7c4ff] mt-1">
-                                Rs. {equipment.dailyRate} <span className="text-sm text-[#8d90a2] font-normal">/ day</span>
+                                Rs. {equipment.dailyRate} <span className="text-sm text-[#a0a3b5] font-normal">/ day</span>
                             </p>
                         </div>
 
                         <div className="border-t border-[#2a2a2a] pt-4 flex justify-between text-sm">
-                            <span className="text-[#8d90a2]">Deposit</span>
+                            <span className="text-[#a0a3b5]">Deposit</span>
                             <span className="text-[#e5e2e1] font-semibold">Rs. {equipment.depositAmount}</span>
                         </div>
 
                         <div className="flex justify-between text-sm">
-                            <span className="text-[#8d90a2]">Availability</span>
+                            <span className="text-[#a0a3b5]">Availability</span>
                             <span className={`font-semibold ${!equipment.isBooked ? "text-emerald-400" : "text-red-400"}`}>
                                 {equipment.isBooked ? "Currently Rented" : "In Stock"}
                             </span>

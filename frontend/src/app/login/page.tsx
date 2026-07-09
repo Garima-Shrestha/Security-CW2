@@ -170,13 +170,13 @@ function LoginPageContent() {
                                         Email Address
                                     </label>
                                     <div className="relative">
-                                        <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                        <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                         <input
                                             id="email"
                                             type="email"
                                             autoComplete="off"
                                             {...credentialsForm.register("email")}
-                                            className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                            className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                             placeholder="example@gmail.com"
                                         />
                                     </div>
@@ -194,20 +194,20 @@ function LoginPageContent() {
                                         </label>
                                     </div>
                                     <div className="relative">
-                                        <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                        <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                         <input
                                             id="password"
                                             type={showPassword ? "text" : "password"}
                                             autoComplete="current-password"
                                             {...credentialsForm.register("password")}
-                                            className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                            className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                             placeholder="••••••••••••"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword((s) => !s)}
                                             aria-label={showPassword ? "Hide password" : "Show password"}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a0a3b5] hover:text-[#e5e2e1]"
                                         >
                                             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                         </button>
@@ -242,7 +242,7 @@ function LoginPageContent() {
                                 </button>
 
                                 <div className="text-center pt-3">
-                                    <p className="text-sm text-[#8d90a2]">
+                                    <p className="text-sm text-[#a0a3b5]">
                                         Don&apos;t have an account?{" "}
                                         <Link href="/register" className="text-[#b7c4ff] font-medium hover:text-white underline underline-offset-2">
                                             Join Shutter
@@ -288,7 +288,7 @@ function LoginPageContent() {
                                         maxLength={6}
                                         autoComplete="one-time-code"
                                         {...totpForm.register("code")}
-                                        className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-center text-lg tracking-[0.5em] font-medium focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#8d90a2]"
+                                        className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-center text-lg tracking-[0.5em] font-medium focus:outline-none focus:border-[#0052ff] transition placeholder:text-[#a0a3b5]"
                                         placeholder="000000"
                                     />
                                     {totpForm.formState.errors.code && (

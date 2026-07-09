@@ -87,14 +87,14 @@ function ResetPasswordContent() {
                     <div>
                         <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">New Password</label>
                         <div className="relative">
-                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                             <input
                                 type={showNew ? "text" : "password"}
                                 autoComplete="new-password"
                                 {...register("newPassword")}
                                 className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
                             />
-                            <button type="button" onClick={() => setShowNew((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]" tabIndex={-1}>
+                            <button type="button" onClick={() => setShowNew((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a0a3b5] hover:text-[#e5e2e1]" tabIndex={-1}>
                                 {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>
@@ -104,8 +104,8 @@ function ResetPasswordContent() {
                                     const passed = rule.test(newPasswordValue);
                                     return (
                                         <div key={rule.label} className="flex items-center gap-1.5 text-xs">
-                                            {passed ? <Check size={12} className="text-emerald-400 shrink-0" /> : <X size={12} className="text-[#8d90a2] shrink-0" />}
-                                            <span className={passed ? "text-[#c3c5d9]" : "text-[#8d90a2]"}>{rule.label}</span>
+                                            {passed ? <Check size={12} className="text-emerald-400 shrink-0" /> : <X size={12} className="text-[#a0a3b5] shrink-0" />}
+                                            <span className={passed ? "text-[#c3c5d9]" : "text-[#a0a3b5]"}>{rule.label}</span>
                                         </div>
                                     );
                                 })}
@@ -116,14 +116,14 @@ function ResetPasswordContent() {
                     <div>
                         <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Confirm Password</label>
                         <div className="relative">
-                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                            <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                             <input
                                 type={showConfirm ? "text" : "password"}
                                 autoComplete="new-password"
                                 {...register("confirmPassword")}
                                 className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:border-[#0052ff] transition"
                             />
-                            <button type="button" onClick={() => setShowConfirm((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8d90a2] hover:text-[#e5e2e1]" tabIndex={-1}>
+                            <button type="button" onClick={() => setShowConfirm((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a0a3b5] hover:text-[#e5e2e1]" tabIndex={-1}>
                                 {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>

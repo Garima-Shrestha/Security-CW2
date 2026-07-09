@@ -42,7 +42,7 @@ function PaymentCallbackContent() {
             {status === "verifying" && (
                 <>
                     <Loader2 size={28} className="animate-spin text-[#0052ff]" />
-                    <p className="text-[#8d90a2]">Verifying payment...</p>
+                    <p className="text-[#a0a3b5]">Verifying payment...</p>
                 </>
             )}
             {status === "success" && (

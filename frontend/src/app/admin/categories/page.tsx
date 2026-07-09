@@ -141,8 +141,9 @@ function AdminCategoriesContent() {
                     )}
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Name</label>
+                        <label htmlFor="category-name" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Name</label>
                         <input
+                            id="category-name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -154,8 +155,9 @@ function AdminCategoriesContent() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description (optional)</label>
+                        <label htmlFor="category-description" className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Description (optional)</label>
                         <textarea
+                            id="category-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             maxLength={300}
@@ -204,7 +206,7 @@ function AdminCategoriesContent() {
 
                 <div className="space-y-3">
                     <div className="relative max-w-sm">
-                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                         <input
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -214,12 +216,12 @@ function AdminCategoriesContent() {
                     </div>
 
                     {filtered.length === 0 ? (
-                        <p className="text-sm text-[#8d90a2]">No categories found.</p>
+                        <p className="text-sm text-[#a0a3b5]">No categories found.</p>
                     ) : (
                         <div className="overflow-x-auto rounded-xl border border-[#2a2a2a]">
                             <table className="w-full text-sm">
                                 <thead>
-                                    <tr className="bg-[#1a1a1a] text-left text-[#8d90a2]">
+                                    <tr className="bg-[#1a1a1a] text-left text-[#a0a3b5]">
                                         <th className="px-4 py-3 font-medium">Name</th>
                                         <th className="px-4 py-3 font-medium">Description</th>
                                         <th className="px-4 py-3 font-medium">Items</th>
@@ -245,15 +247,15 @@ function AdminCategoriesContent() {
                                                     {c.isActive ? "Active" : "Inactive"}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3 text-[#8d90a2]">
+                                            <td className="px-4 py-3 text-[#a0a3b5]">
                                                 {new Date(c.createdAt).toLocaleDateString()}
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex gap-3">
-                                                    <button onClick={() => startEdit(c)} className="text-[#8d90a2] hover:text-[#0052ff]">
+                                                    <button onClick={() => startEdit(c)} className="text-[#a0a3b5] hover:text-[#0052ff]">
                                                         <Pencil size={16} />
                                                     </button>
-                                                    <button onClick={() => setDeleteTarget(c)} className="text-[#8d90a2] hover:text-red-400">
+                                                    <button onClick={() => setDeleteTarget(c)} className="text-[#a0a3b5] hover:text-red-400">
                                                         <Trash2 size={16} />
                                                     </button>
                                                 </div>
@@ -267,7 +269,7 @@ function AdminCategoriesContent() {
 
                     {filtered.length > 0 && (
                     <div className="flex items-center justify-between pt-2">
-                        <p className="text-xs text-[#8d90a2]">
+                        <p className="text-xs text-[#a0a3b5]">
                             Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, filtered.length)} of {filtered.length} categories
                         </p>
                         <div className="flex items-center gap-2">
@@ -306,7 +308,7 @@ function AdminCategoriesContent() {
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center px-6 z-50">
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 max-w-sm w-full space-y-4">
                         <h3 className="text-white font-semibold">Delete category?</h3>
-                        <p className="text-sm text-[#8d90a2]">
+                        <p className="text-sm text-[#a0a3b5]">
                             Are you sure you want to delete <span className="text-[#e5e2e1]">{deleteTarget.name}</span>? This cannot be undone.
                         </p>
                         <div className="flex gap-3">

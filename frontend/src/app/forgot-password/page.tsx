@@ -38,13 +38,13 @@ export default function ForgotPasswordPage() {
     return (
         <div className="min-h-screen bg-[#131313] flex items-center justify-center px-6 py-12">
             <div className="w-full max-w-sm space-y-6">
-                <Link href="/login" className="flex items-center gap-1 text-sm text-[#8d90a2] hover:text-[#e5e2e1]">
+                <Link href="/login" className="flex items-center gap-1 text-sm text-[#a0a3b5] hover:text-[#e5e2e1]">
                     <ArrowLeft size={14} /> Back to login
                 </Link>
 
                 <div>
                     <h1 className="text-2xl font-semibold text-white">Reset your password</h1>
-                    <p className="text-[#8d90a2] mt-2 text-sm">Enter your email and we'll send you a reset link.</p>
+                    <p className="text-[#a0a3b5] mt-2 text-sm">Enter your email and we'll send you a reset link.</p>
                 </div>
 
                 {submitted ? (
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
                         <div>
                             <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Email Address</label>
                             <div className="relative">
-                                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8d90a2]" />
+                                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a0a3b5]" />
                                 <input
                                     type="email"
                                     autoComplete="off"
