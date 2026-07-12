@@ -54,7 +54,7 @@ function LoginPageContent() {
             if (captchaWidgetId.current !== null) return; // already rendered
 
             captchaWidgetId.current = hcaptcha.render(captchaContainerRef.current, {
-                sitekey: "e7f0b744-d8b0-4732-b0a8-f2086638fc7e",
+                sitekey: process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY || "",
                 callback: (token: string) => {
                     (window as any).__hcaptchaToken = token;
                 },
