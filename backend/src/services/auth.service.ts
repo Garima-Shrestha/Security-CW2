@@ -85,6 +85,12 @@ export class AuthService {
         if (!isPasswordValid) {
             const updated = await userRepository.incrementFailedAttempts(user._id.toString());
             logSecurityEvent("LOGIN_FAILED", { userId: user._id.toString(), attempts: updated?.failedLoginAttempts });
+            if (updated && updated.failedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
+                const lockUntil = new Date(Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000);
+                await userRepository.setLockout(user._id.toString(), lockUntil);
+                logSecurityEvent("ACCOUNT_LOCKED", { userId: user._id.toString() });
+                throw new HttpError(429, `Too many failed attempts. Account locked for ${LOCKOUT_DURATION_MINUTES} minutes.`);
+            }
             throw genericError();
         }
 
@@ -214,6 +220,14 @@ export class AuthService {
 
         const isValid = await bcryptjs.compare(data.oldPassword, user.password);
         if (!isValid) throw new HttpError(401, "Old password is incorrect");
+
+        // Prevent reuse of last N passwords
+        for (const oldHash of user.previousPasswordHashes || []) {
+            const matches = await bcryptjs.compare(data.newPassword, oldHash);
+            if (matches) {
+                throw new HttpError(400, `New password cannot match any of your last ${PASSWORD_HISTORY_LIMIT} passwords`);
+            }
+        }
 
         const newHash = await bcryptjs.hash(data.newPassword, 12);
         const updatedHistory = [newHash, ...(user.previousPasswordHashes || [])].slice(0, PASSWORD_HISTORY_LIMIT);
