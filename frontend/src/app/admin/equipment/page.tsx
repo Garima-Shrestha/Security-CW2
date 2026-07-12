@@ -84,7 +84,7 @@ function AdminEquipmentContent() {
                 </div>
 
                 {error && (
-                    <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                    <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         {error}
                     </div>
                 )}

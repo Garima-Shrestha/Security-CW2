@@ -77,7 +77,7 @@ function NewEquipmentContent() {
 
                 <form onSubmit={onSubmit} className="space-y-4 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
                     {error && (
-                        <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                        <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                             {error}
                         </div>
                     )}
@@ -249,7 +249,7 @@ function NewEquipmentContent() {
                     </div>
 
                     {error && (
-                        <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                        <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                             {error}
                         </div>
                     )}

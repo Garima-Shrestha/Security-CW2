@@ -22,6 +22,7 @@ import rentalRoutes from "./routes/rental.route";
 import adminRentalRoutes from "./routes/admin/rental.route";
 import adminUserRoutes from "./routes/admin/user.route";
 import userDataRoutes from "./routes/user-data.route";
+import contactRoutes from "./routes/contact.route";
 
 dotenv.config();
 
@@ -99,6 +100,7 @@ app.use("/api/rentals", rentalRoutes);
 app.use("/api/admin/rentals", adminRentalRoutes);
 app.use("/api/admin/users", adminUserRoutes);
 app.use("/api/users", userDataRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Final error handler that catches anything not handled in controllers
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

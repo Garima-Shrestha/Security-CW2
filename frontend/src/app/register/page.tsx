@@ -236,8 +236,30 @@ export default function RegisterPage() {
                             )}
                         </div>
 
+                        <div className="flex items-start gap-2">
+                            <input
+                                id="acceptTerms"
+                                type="checkbox"
+                                {...register("acceptTerms")}
+                                className="mt-1 accent-[#0052ff]"
+                            />
+                            <label htmlFor="acceptTerms" className="text-sm text-[#a0a3b5]">
+                                I agree to the{" "}
+                                <Link href="/terms" target="_blank" className="text-[#b7c4ff] underline underline-offset-2 hover:text-white">
+                                    Terms & Conditions
+                                </Link>{" "}
+                                and{" "}
+                                <Link href="/privacy" target="_blank" className="text-[#b7c4ff] underline underline-offset-2 hover:text-white">
+                                    Privacy Policy
+                                </Link>
+                            </label>
+                        </div>
+                        {errors.acceptTerms && (
+                            <p className="text-red-600 text-xs">{errors.acceptTerms.message}</p>
+                        )}
+
                         {serverError && (
-                            <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                            <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                                 {serverError}
                             </div>
                         )}

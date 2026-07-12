@@ -48,13 +48,13 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 {submitted ? (
-                    <div className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3">
+                    <div className="bg-[#29c063] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         If that email is registered, a reset link has been sent.
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
                         {serverError && (
-                            <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">{serverError}</div>
+                            <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">{serverError}</div>
                         )}
                         <div>
                             <label className="block text-sm font-medium text-[#e5e2e1] mb-1.5">Email Address</label>

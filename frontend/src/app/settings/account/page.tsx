@@ -81,7 +81,7 @@ function AccountSettingsContent() {
             <div className="w-full max-w-md space-y-6">
                 <h1 className="text-2xl font-semibold text-white">Account Details</h1>
 
-                {success && <div className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3">{success}</div>}
+                {success && <div className="bg-[#29c063] text-[#fafafa] text-sm rounded-lg px-4 py-3">{success}</div>}
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
                     <div>

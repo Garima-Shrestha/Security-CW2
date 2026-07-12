@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { User, ShieldCheck, KeyRound, LogOut, ChevronDown } from "lucide-react";
+import { User, LogOut, ChevronDown } from "lucide-react";
 
 const HIDDEN_ON = ["/login", "/register", "/forgot-password", "/reset-password"];
 
@@ -54,7 +54,9 @@ export default function Navbar() {
                 </div>
             ) : (
                 <div className="flex items-center gap-6 text-sm justify-self-center">
+                    <Link href="/equipment" className={navLinkClass("/equipment")}>Home</Link>
                     <Link href="/rentals" className={navLinkClass("/rentals")}>My Rentals</Link>
+                    <Link href="/contact" className={navLinkClass("/contact")}>Contact</Link>
                 </div>
             )}
 
@@ -78,22 +80,31 @@ export default function Navbar() {
                             onClick={() => setOpen(false)}
                             className="flex items-center gap-2 px-4 py-2 text-sm text-[#e5e2e1] hover:bg-[#201f1f]"
                         >
-                            <User size={14} /> Profile
+                            Profile
                         </Link>
                         <Link
                             href="/settings/account"
                             onClick={() => setOpen(false)}
                             className="flex items-center gap-2 px-4 py-2 text-sm text-[#e5e2e1] hover:bg-[#201f1f]"
                         >
-                            <KeyRound size={14} /> Account Details
+                            Account Details
                         </Link>
                         <Link
                             href="/settings/security"
                             onClick={() => setOpen(false)}
                             className="flex items-center gap-2 px-4 py-2 text-sm text-[#e5e2e1] hover:bg-[#201f1f]"
                         >
-                            <ShieldCheck size={14} /> MFA
+                            MFA
                         </Link>
+                        {user.role === "admin" && (
+                            <Link
+                                href="/contact"
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-2 px-4 py-2 text-sm text-[#e5e2e1] hover:bg-[#201f1f]"
+                            >
+                                Contact
+                            </Link>
+                        )}
                         <div className="border-t border-[#2a2a2a] my-1" />
                         <button
                             onClick={() => { setOpen(false); logout(); }}

@@ -68,19 +68,19 @@ function TotpSetupContent() {
                 </div>
 
                 {isEnabled && !qrCode && (
-                    <div className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3">
+                    <div className="bg-[#29c063] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         MFA is currently enabled on your account.
                     </div>
                 )}
 
                 {successMsg && (
-                    <div className="bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3">
+                    <div className="bg-[#29c063] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         {successMsg}
                     </div>
                 )}
 
                 {serverError && (
-                    <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                    <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         {serverError}
                     </div>
                 )}

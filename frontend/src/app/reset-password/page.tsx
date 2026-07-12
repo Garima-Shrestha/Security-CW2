@@ -80,7 +80,7 @@ function ResetPasswordContent() {
                 <h1 className="text-2xl font-semibold text-white">Set a new password</h1>
 
                 {serverError && (
-                    <div className="bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">{serverError}</div>
+                    <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">{serverError}</div>
                 )}
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>

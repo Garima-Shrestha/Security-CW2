@@ -39,7 +39,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <Navbar />
-          {children}
+          <div className="flex-1">{children}</div>
+          <footer className="border-t border-[#252525] bg-[#131313] px-6 py-4 text-center text-xs text-[#a0a3b5]">
+            <a href="/terms" className="hover:text-[#e5e2e1] underline underline-offset-2">Terms & Conditions</a>
+            {" · "}
+            <a href="/privacy" className="hover:text-[#e5e2e1] underline underline-offset-2">Privacy Policy</a>
+          </footer>
         </AuthProvider>
       </body>
     </html>
