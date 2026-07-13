@@ -239,7 +239,7 @@ function EditEquipmentContent() {
                                         <img
                                             src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
                                             alt={`${title || "Equipment"} photo`}
-                                            className="w-20 h-20 rounded-lg object-cover border border-[#434656]"
+                                            className="w-20 h-20 rounded-lg object-contain border border-[#434656]"
                                         />
                                         <button
                                             type="button"

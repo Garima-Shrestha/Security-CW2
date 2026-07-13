@@ -93,7 +93,7 @@ function MyRentalsContent() {
                                         <img
                                             src={`${process.env.NEXT_PUBLIC_API_URL}${r.equipment.images[0]}`}
                                             alt={r.equipment.title}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-contain"
                                         />
                                     )}
                                 </div>

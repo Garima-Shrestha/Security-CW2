@@ -78,18 +78,18 @@ function EquipmentListContent() {
                                 href={`/equipment/${item._id}`}
                                 className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden hover:border-[#0052ff] transition"
                             >
-                                <div className="aspect-video bg-[#0d0d0d]">
+                                <div className="aspect-[4/3] bg-[#f0f0f0] flex items-center justify-center p-4">
                                     {item.images?.[0] && (
                                         // eslint-disable-next-line @next/next/no-img-element
                                         <img
                                             src={`${process.env.NEXT_PUBLIC_API_URL}${item.images[0]}`}
                                             alt={item.title}
-                                            className="w-full h-full object-cover"
+                                            className="max-w-full max-h-full object-contain"
                                         />
                                     )}
                                 </div>
                                 <div className="p-4 space-y-1">
-                                    <h3 className="text-[#e5e2e1] font-medium">{item.title}</h3>
+                                    <h3 className="text-[#e5e2e1] font-medium truncate">{item.title}</h3>
                                     <p className="text-xs text-[#a0a3b5]">
                                         {item.brand} · {item.model} · {item.condition}
                                     </p>

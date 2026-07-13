@@ -105,7 +105,7 @@ export class KhaltiRentalService {
             return { status: "Completed", rentalId: payment.purchaseOrderId };
         }
 
-        // This is the ONLY place isPaid/status flip to confirmed — never from a client request body
+        // This is the ONLY place isPaid/status flip to confirmed: never from a client request body
         const rental = await rentalRepo.updateRental(payment.purchaseOrderId, {
             status: "confirmed",
             isPaid: true,

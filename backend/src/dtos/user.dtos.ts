@@ -1,7 +1,7 @@
 import z from 'zod';
 import { UserSchema } from '../types/user.type';
 
-// For local register — password required here even though schema-level it's optional
+// For local register: password required here even though schema-level it's optional
 // (schema stays optional to allow OAuth users with no password)
 export const RegisterUserDto = UserSchema.pick({
     username: true,

@@ -145,6 +145,7 @@ function AdminCategoriesContent() {
                         <input
                             id="category-name"
                             value={name}
+                            autoComplete="off"
                             onChange={(e) => setName(e.target.value)}
                             required
                             minLength={1}

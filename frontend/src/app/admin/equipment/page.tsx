@@ -30,7 +30,7 @@ function AdminEquipmentContent() {
         setError(null);
         try {
             const res = await api.get("/api/equipment", {
-                params: { page, size: 10, searchTerm: searchTerm || undefined },
+                params: { page, size: 5, searchTerm: searchTerm || undefined },
             });
             setEquipment(res.data.data);
             setTotalPages(res.data.pagination.totalPages);
@@ -117,7 +117,7 @@ function AdminEquipmentContent() {
                                                     <img
                                                         src={`${process.env.NEXT_PUBLIC_API_URL}${item.images[0]}`}
                                                         alt={item.title}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-contain"
                                                     />
                                                 )}
                                             </div>

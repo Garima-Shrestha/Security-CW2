@@ -222,7 +222,7 @@ function AdminRentalsContent() {
                     <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 max-w-sm w-full space-y-4">
                         <h3 className="text-white font-semibold">Process Return</h3>
                         <p className="text-sm text-[#a0a3b5]">
-                            {returnTarget.equipment?.title} — deposit Rs. {returnTarget.depositAmount}
+                            {returnTarget.equipment?.title}: deposit Rs. {returnTarget.depositAmount}
                         </p>
 
                         <div>

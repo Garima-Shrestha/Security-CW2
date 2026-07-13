@@ -74,7 +74,7 @@ function EquipmentDetailContent() {
                             <img
                                 src={`${process.env.NEXT_PUBLIC_API_URL}${equipment.images[activeImage]}`}
                                 alt={equipment.title}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain"
                             />
                         )}
                     </div>
@@ -92,7 +92,7 @@ function EquipmentDetailContent() {
                                     <img
                                         src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
                                         alt={`${equipment.title} thumbnail ${idx + 1}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-contain"
                                     />
                                 </button>
                             ))}
