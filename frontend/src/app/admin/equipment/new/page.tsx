@@ -87,6 +87,7 @@ function NewEquipmentContent() {
                         <input
                             id="equipment-title"
                             value={title}
+                            autoComplete="off"
                             onChange={(e) => setTitle(e.target.value)}
                             required
                             minLength={2}
@@ -114,6 +115,7 @@ function NewEquipmentContent() {
                         <select
                             id="equipment-category"
                             value={category}
+                            autoComplete="off"
                             onChange={(e) => setCategory(e.target.value)}
                             required
                             className="w-full bg-[#201f1f] border border-[#434656] text-[#e5e2e1] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#0052ff]"
@@ -136,6 +138,7 @@ function NewEquipmentContent() {
                             <input
                                 id="equipment-brand"
                                 value={brand}
+                                autoComplete="off"
                                 onChange={(e) => setBrand(e.target.value)}
                                 required
                                 maxLength={50}
@@ -148,6 +151,7 @@ function NewEquipmentContent() {
                             <input
                                 id="equipment-model"
                                 value={model}
+                                autoComplete="off"
                                 onChange={(e) => setModel(e.target.value)}
                                 required
                                 maxLength={50}
