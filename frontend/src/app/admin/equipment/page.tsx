@@ -142,7 +142,7 @@ function AdminEquipmentContent() {
                                                 <Link href={`/admin/equipment/${item._id}/edit`} className="text-[#a0a3b5] hover:text-[#0052ff]">
                                                     <Pencil size={16} />
                                                 </Link>
-                                                <button onClick={() => setDeleteTarget(item)} className="text-[#a0a3b5] hover:text-red-400">
+                                                <button onClick={() => setDeleteTarget(item)} aria-label={`Delete ${item.title}`} className="text-[#a0a3b5] hover:text-red-400">
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>

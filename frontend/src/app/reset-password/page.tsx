@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import api from "@/lib/axios";
 import { Lock, Check, X, Eye, EyeOff } from "lucide-react";
+import { getPasswordStrength } from "@/lib/passwordStrength";
 
 const resetPasswordSchema = z.object({
     newPassword: z.string()
@@ -47,6 +48,7 @@ function ResetPasswordContent() {
     });
 
     const newPasswordValue = watch("newPassword") || "";
+    const strength = getPasswordStrength(newPasswordValue);
 
     async function onSubmit(values: ResetPasswordValues) {
         if (!token) {
@@ -98,6 +100,17 @@ function ResetPasswordContent() {
                                 {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>
+                        {newPasswordValue.length > 0 && (
+                            <div className="mt-2">
+                                <div className="h-1.5 w-full bg-[#2a2a2a] rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full transition-all"
+                                        style={{ width: `${(strength.score + 1) * 20}%`, backgroundColor: strength.color }}
+                                    />
+                                </div>
+                                <p className="text-xs mt-1" style={{ color: strength.color }}>{strength.label}</p>
+                            </div>
+                        )}
                         {newPasswordValue.length > 0 && (
                             <div className="mt-2 space-y-1">
                                 {PASSWORD_RULES.map((rule) => {

@@ -10,6 +10,7 @@ import { Eye, EyeOff, Check, X, ShieldCheck, Lock, Mail, User as UserIcon } from
 import api from "@/lib/axios";
 import { useAuth } from "@/hooks/useAuth";
 import { registerSchema, RegisterFormValues } from "@/lib/validation/auth.schema";
+import { getPasswordStrength } from "@/lib/passwordStrength";
 import cameraImg from "@/assets/camera.png";
 
 const PASSWORD_RULES = [
@@ -39,6 +40,7 @@ export default function RegisterPage() {
     });
 
     const passwordValue = watch("password") || "";
+    const strength = getPasswordStrength(passwordValue);
 
     useEffect(() => {
         if (!isInitializing && user) {
@@ -186,6 +188,18 @@ export default function RegisterPage() {
                                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
                             </div>
+
+                            {passwordValue.length > 0 && (
+                                <div className="mt-2">
+                                    <div className="h-1.5 w-full bg-[#2a2a2a] rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full transition-all"
+                                            style={{ width: `${(strength.score + 1) * 20}%`, backgroundColor: strength.color }}
+                                        />
+                                    </div>
+                                    <p className="text-xs mt-1" style={{ color: strength.color }}>{strength.label}</p>
+                                </div>
+                            )}
 
                             {passwordValue.length > 0 && (
                                 <div className="mt-2 space-y-1">
