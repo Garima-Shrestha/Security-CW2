@@ -2,9 +2,11 @@ import { RentalRepository } from "../../repositories/rental.repository";
 import { ProcessReturnDto } from "../../dtos/rental.dto";
 import { HttpError } from "../../errors/http-error";
 import { logActivity, logSecurityEvent } from "../../config/logger";
-import { sanitizeText } from "../../utils/sanitize"; 
+import { sanitizeText } from "../../utils/sanitize";
+import { KhaltiRentalService } from "../khalti-rental.service";
 
 const rentalRepo = new RentalRepository();
+const khaltiRentalService = new KhaltiRentalService();
 
 export class RentalAdminService {
     async getAllRentals(page?: string, size?: string, status?: any) {
@@ -42,15 +44,26 @@ export class RentalAdminService {
             throw new HttpError(400, "Deduction cannot exceed deposit amount");
         }
 
+        const refundAmount = rental.depositAmount - data.deductionAmount;
+
+        // If there's nothing to refund, there's nothing to do.
+        // otherwise we try to refund through khalti, but if that fails, we still let the return go through and just
+        // mark it as needing a manual refund
+        let refundedAutomatically = true;
+        if (refundAmount > 0) {
+            const result = await khaltiRentalService.refundDeposit(adminId, rentalId, refundAmount);
+            refundedAutomatically = result.automated;
+        }
+
         const updated = await rentalRepo.updateRental(rentalId, {
             status: "completed",
             returnedAt: new Date(),
             deductionAmount: data.deductionAmount,
             deductionReason: data.deductionReason ? sanitizeText(data.deductionReason) : undefined,
-            depositRefunded: true,
+            depositRefunded: refundedAutomatically,
         });
 
-        logActivity("RENTAL_RETURN_PROCESSED", { adminId, rentalId, deductionAmount: data.deductionAmount });
+        logActivity("RENTAL_RETURN_PROCESSED", { adminId, rentalId, deductionAmount: data.deductionAmount, refundedAutomatically });
         return updated;
     }
 

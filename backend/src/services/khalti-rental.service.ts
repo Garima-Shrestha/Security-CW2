@@ -120,4 +120,68 @@ export class KhaltiRentalService {
 
         return { status: "Completed", rentalId: rental?._id };
     }
+
+    // Tries to refund the deposit through Khalti when a rental is returned. Doesn't throw if Khalti's refund fails, just returns whether it worked,
+    // so the return can still be completed and the admin can see it needs a manual refund instead of getting stuck.
+    async refundDeposit(adminId: string, rentalId: string, refundAmountNpr: number): Promise<{ automated: boolean }> {
+        const payment = await khaltiRepo.getPaymentByPurchaseOrderId(rentalId);
+        if (!payment || !payment.transactionId) {
+            logSecurityEvent("KHALTI_REFUND_SKIPPED", { adminId, rentalId, reason: "no completed payment or transaction id found" });
+            return { automated: false };
+        }
+
+        const refundAmountPaisa = Math.round(refundAmountNpr * 100);
+        if (refundAmountPaisa <= 0 || refundAmountPaisa > payment.amount || !KHALTI_SECRET_KEY) {
+            logSecurityEvent("KHALTI_REFUND_SKIPPED", { adminId, rentalId, reason: "invalid amount or missing secret key" });
+            return { automated: false };
+        }
+
+        const response = await safeFetch(`${KHALTI_BASE_URL}/epayment/refund/`, {
+            method: "POST",
+            headers: {
+                Authorization: `Key ${KHALTI_SECRET_KEY}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                mobile: "",
+                amount: refundAmountPaisa,
+                transaction_id: payment.transactionId,
+                pidx: payment.pidx,
+            }),
+        });
+
+        // khalti sandbox sometimes sends back an html error page instead of json for this endpoint, so reading as text first to avoid crashing
+        const rawBody = await response.text();
+        let payload: any = null;
+        try {
+            payload = JSON.parse(rawBody);
+        } catch {
+            payload = null;
+        }
+
+        if (!response.ok || !payload) {
+            logSecurityEvent("KHALTI_REFUND_FAILED", {
+                adminId,
+                rentalId,
+                reason: payload?.message || "Khalti did not return a valid refund response (sandbox limitation)",
+            });
+
+            await khaltiRepo.updatePaymentByPidx(payment.pidx, {
+                lookupResponse: {
+                    ...payment.lookupResponse,
+                    refund: { manualRefundRequired: true, requestedAmountNpr: refundAmountNpr, requestedAt: new Date() },
+                },
+            });
+
+            return { automated: false };
+        }
+
+        await khaltiRepo.updatePaymentByPidx(payment.pidx, {
+            lookupResponse: { ...payment.lookupResponse, refund: payload },
+        });
+
+        logActivity("RENTAL_DEPOSIT_REFUNDED", { adminId, rentalId, refundAmountNpr });
+
+        return { automated: true };
+    }
 }

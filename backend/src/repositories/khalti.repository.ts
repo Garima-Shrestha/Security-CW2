@@ -6,6 +6,7 @@ export interface IKhaltiRepository {
   updatePaymentByPidx(pidx: string,data: Partial<IKhaltiPayment>): Promise<IKhaltiPayment | null>;
   getPaymentById(id: string): Promise<IKhaltiPayment | null>;
   getPaymentsByUser(userId: string): Promise<IKhaltiPayment[]>;
+  getPaymentByPurchaseOrderId(purchaseOrderId: string): Promise<IKhaltiPayment | null>;
 }
 
 export class KhaltiRepository implements IKhaltiRepository {
@@ -36,5 +37,9 @@ export class KhaltiRepository implements IKhaltiRepository {
 
     async getPaymentsByUser(userId: string): Promise<IKhaltiPayment[]> {
         return await KhaltiPaymentModel.find({ user: userId }).sort({ createdAt: -1 });
+    }
+
+    async getPaymentByPurchaseOrderId(purchaseOrderId: string): Promise<IKhaltiPayment | null> {
+        return await KhaltiPaymentModel.findOne({ purchaseOrderId, status: "Completed" }).sort({ createdAt: -1 });
     }
 }

@@ -21,7 +21,10 @@ function AdminRentalsContent() {
     const [totalPages, setTotalPages] = useState(1);
     const [statusFilter, setStatusFilter] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [modalError, setModalError] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [needsManualRefund, setNeedsManualRefund] = useState(false);
+    const [manualRefundAmount, setManualRefundAmount] = useState<number | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
     // return modal state
@@ -74,27 +77,39 @@ function AdminRentalsContent() {
         setReturnTarget(rental);
         setDeductionAmount("0");
         setDeductionReason("");
-        setError(null);
+        setModalError(null);
     }
 
     async function onProcessReturn() {
         if (!returnTarget) return;
         const amount = Number(deductionAmount);
         if (amount > 0 && !deductionReason.trim()) {
-            setError("Deduction reason is required when deduction amount > 0");
+            setModalError("Deduction reason is required when deduction amount > 0");
             return;
         }
+        setModalError(null);
         setIsProcessing(true);
         try {
-            await api.put(`/api/admin/rentals/${returnTarget._id}/process-return`, {
+            const refundAmount = returnTarget.depositAmount - amount;
+
+            const res = await api.put(`/api/admin/rentals/${returnTarget._id}/process-return`, {
                 deductionAmount: amount,
                 deductionReason: deductionReason || undefined,
             });
-            setSuccess("Return processed");
+            setError(null);
+            if (res.data.data.depositRefunded) {
+                setNeedsManualRefund(false);
+                setManualRefundAmount(null);
+                setSuccess("Return processed and deposit refunded via Khalti.");
+            } else {
+                setSuccess(null);
+                setNeedsManualRefund(true);
+                setManualRefundAmount(refundAmount);
+            }
             setReturnTarget(null);
             load();
         } catch (err: any) {
-            setError(err?.response?.data?.message || "Failed to process return");
+            setModalError(err?.response?.data?.message || "Failed to process return");
         } finally {
             setIsProcessing(false);
         }
@@ -123,12 +138,17 @@ function AdminRentalsContent() {
                     <option value="overdue">Overdue</option>
                 </select>
 
-                {error && (
+                {needsManualRefund && (
+                    <div className="bg-[#a86a1a] text-[#fafafa] text-sm rounded-lg px-4 py-3">
+                        Return processed successfully. However, the deposit refund of Rs. {manualRefundAmount} could not be completed automatically. Please coordinate with your payments team to issue this refund manually.
+                    </div>
+                )}
+                {!needsManualRefund && error && (
                     <div className="bg-[#c42727] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         {error}
                     </div>
                 )}
-                {success && (
+                {!needsManualRefund && success && (
                     <div className="bg-[#29c063] text-[#fafafa] text-sm rounded-lg px-4 py-3">
                         {success}
                     </div>
@@ -254,11 +274,11 @@ function AdminRentalsContent() {
                             />
                         </div>
 
-                        {error && <p className="text-red-400 text-xs">{error}</p>}
+                        {modalError && <p className="text-red-400 text-xs">{modalError}</p>}
 
                         <div className="flex gap-3">
                             <button
-                                onClick={onProcessReturn}
+                                onClick={() => onProcessReturn()}
                                 disabled={isProcessing}
                                 className="flex-1 bg-[#0052ff] hover:bg-[#0066ff] text-white rounded-lg py-2 text-sm font-semibold disabled:opacity-50"
                             >
