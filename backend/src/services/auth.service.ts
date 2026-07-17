@@ -48,7 +48,13 @@ export class AuthService {
 
         logActivity("USER_REGISTERED", { userId: newUser._id.toString(), email: newUser.email });
 
-        return newUser;
+        // return newUser;
+        const userObj = newUser.toObject();
+        delete userObj.password;
+        delete userObj.totpSecret;
+        delete userObj.previousPasswordHashes;
+
+        return userObj;
     }
 
     //  verify password, check lockout, issue pre-auth token 
