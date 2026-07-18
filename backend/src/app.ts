@@ -14,6 +14,7 @@ import { generalRateLimiter } from "./middlewares/rate-limit.middleware";
 import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrf.middleware";
 import { logger } from "./config/logger";
 import { enforceHttps } from "./middlewares/https-enforce.middleware";
+import { ipBlockMiddleware } from "./middlewares/ip-block.middleware";
 
 import authRoutes from "./routes/auth.route";
 import equipmentCategoryRoutes from "./routes/equipment-category.route";
@@ -72,7 +73,8 @@ app.use(
         cookie: {
             httpOnly: true,
             secure: NODE_ENV === "production",
-            sameSite: "lax",
+            // sameSite: "lax",
+            sameSite: "strict",
             maxAge: 10 * 60 * 1000, // 10 min, only needs to survive the redirect flow
         },
     })
@@ -80,6 +82,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(ipBlockMiddleware);
 app.use(generalRateLimiter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));

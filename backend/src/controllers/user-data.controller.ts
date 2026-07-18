@@ -69,7 +69,14 @@ export class UserDataController {
             }
 
             const updates: any = {};
-            if (parsed.data.username) updates.username = sanitizeText(parsed.data.username);
+            if (parsed.data.username) {
+                const cleanUsername = sanitizeText(parsed.data.username);
+                const existing = await userRepository.getUserByUsername(cleanUsername);
+                if (existing && existing._id.toString() !== userId.toString()) {
+                    return res.status(409).json({ success: false, message: "Username already in use" });
+                }
+                updates.username = cleanUsername;
+            }
             if (parsed.data.imageUrl) updates.imageUrl = parsed.data.imageUrl;
 
             const updated = await userRepository.updateOneUser(userId.toString(), updates);

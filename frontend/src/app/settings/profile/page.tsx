@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +25,7 @@ function ProfileSettingsContent() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
@@ -40,6 +41,31 @@ function ProfileSettingsContent() {
         document.body.appendChild(link);
         link.click();
         link.remove();
+    }
+
+    const importInputRef = useRef<HTMLInputElement>(null);
+
+    async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setServerError(null);
+        setSuccess(null);
+        try {
+            const text = await file.text();
+            const parsed = JSON.parse(text);
+           const res = await api.post("/api/users/import", { profile: parsed.profile || parsed });
+            if (token) setUserAndToken(res.data.data, token);
+            reset({
+                username: res.data.data.username || "",
+                email: res.data.data.email || "",
+                phone: res.data.data.phone || "",
+            });
+            setSuccess("Profile data imported successfully");
+        } catch (err: any) {
+            setServerError(err?.response?.data?.message || "Failed to import profile data. Make sure the file is a valid export.");
+        } finally {
+            e.target.value = "";
+        }
     }
 
     async function onSubmit(values: ProfileFormValues) {
@@ -144,6 +170,21 @@ function ProfileSettingsContent() {
                         className="w-full border border-[#252d42] text-[#c3c5d9] rounded-lg py-2.5 text-sm font-semibold transition hover:bg-[#131a2a]"
                     >
                         Export My Data
+                    </button>
+
+                    <input
+                        type="file"
+                        accept=".json"
+                        ref={importInputRef}
+                        onChange={handleImportFile}
+                        className="hidden"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => importInputRef.current?.click()}
+                        className="w-full border border-[#252d42] text-[#c3c5d9] rounded-lg py-2.5 text-sm font-semibold transition hover:bg-[#131a2a]"
+                    >
+                        Import Profile Data
                     </button>
                     </div>
                 </form>
