@@ -12,6 +12,7 @@ import { JWT_SECRET, JWT_EXPIRY, PRE_AUTH_TOKEN_EXPIRY, MAX_FAILED_ATTEMPTS, LOC
 import { hashUserAgent } from "../utils/device"; 
 import { encrypt, decrypt } from "../utils/encryption";
 import { verifyCaptcha } from "./captcha.service";
+import { BlacklistedTokenModel } from "../models/blacklisted-token.model";
 
 let userRepository = new UserRepository();
 let totpService = new TotpService();
@@ -316,5 +317,29 @@ export class AuthService {
             JWT_SECRET,
             { expiresIn: JWT_EXPIRY as any }
         );
+    }
+
+    // Blacklist the current access token so it can no longer be used, even though
+    // it hasn't naturally expired yet. This protects against a stolen/copied token
+    // still being valid after the legitimate user has logged out.
+    async logout(token: string, userId: string) {
+        let decoded: any;
+        try {
+            decoded = jwt.verify(token, JWT_SECRET);
+        } catch {
+            // Token already invalid/expired, nothing to blacklist
+            return { message: "Logged out" };
+        }
+
+        const expiresAt = decoded.exp ? new Date(decoded.exp * 1000) : new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+
+        await BlacklistedTokenModel.updateOne(
+            { token },
+            { token, userId, expiresAt },
+            { upsert: true }
+        );
+
+        logActivity("USER_LOGGED_OUT", { userId });
+        return { message: "Logged out" };
     }
 }

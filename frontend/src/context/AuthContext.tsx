@@ -11,7 +11,7 @@ interface AuthContextValue {
     isInitializing: boolean;
     loginStepOne: (email: string, password: string, captchaToken?: string) => Promise<{ requiresTotp: boolean; preAuthToken?: string; user?: User }>;
     loginStepTwo: (preAuthToken: string, code: string) => Promise<User>;
-    logout: () => void;
+    logout: () => Promise<void>;
     setUserAndToken: (user: User, token: string) => void;
 }
 
@@ -71,7 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    function logout() {
+    async function logout() {
+        try {
+            await api.post("/api/auth/logout");
+        } catch {
+            // even if the server call fails, still clear client-side state
+        }
         setAuthToken(null);
         setToken(null);
         setUser(null);

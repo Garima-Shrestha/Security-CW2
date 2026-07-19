@@ -132,6 +132,20 @@ export class AuthController {
         return res.status(200).json({ success: true, data: req.user });
     }
 
+    async logout(req: Request, res: Response) {
+        try {
+            const userId = req.user?._id;
+            const authHeader = req.headers.authorization;
+            const token = authHeader?.split(" ")[1];
+            if (!userId || !token) return res.status(401).json({ success: false, message: "Unauthorized" });
+
+            const result = await authService.logout(token, userId.toString());
+            return res.status(200).json({ success: true, message: result.message });
+        } catch (error: any) {
+            return res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
     async updateProfile(req: Request, res: Response) {
         try {
             const userId = req.user?._id;

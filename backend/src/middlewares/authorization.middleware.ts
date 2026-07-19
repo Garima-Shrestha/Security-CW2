@@ -5,6 +5,7 @@ import { HttpError } from "../errors/http-error";
 import { UserRepository } from "../repositories/user.repository";
 import { hashUserAgent } from "../utils/device";
 import { logSecurityEvent } from "../config/logger";
+import { BlacklistedTokenModel } from "../models/blacklisted-token.model";
 
 let userRepository = new UserRepository();
 
@@ -17,6 +18,11 @@ export const authorizedMiddleware = async (req: Request, res: Response, next: Ne
         const token = authHeader.split(" ")[1];
         if (!token) {
             throw new HttpError(401, "Unauthorized, token missing");
+        }
+
+        const isBlacklisted = await BlacklistedTokenModel.exists({ token });
+        if (isBlacklisted) {
+            throw new HttpError(401, "Session has been logged out, please log in again");
         }
 
         const decoded = jwt.verify(token, JWT_SECRET) as Record<string, any>;

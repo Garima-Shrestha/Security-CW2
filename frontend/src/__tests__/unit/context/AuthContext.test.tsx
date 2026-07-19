@@ -106,12 +106,13 @@ describe("AuthContext", () => {
   test("logout clears user, token, and localStorage", async () => {
     localStorage.setItem("auth_token", "stored.token");
     localStorage.setItem("auth_user", JSON.stringify(mockUser));
+    (api.post as jest.Mock).mockResolvedValue({ data: { success: true, message: "Logged out" } });
 
     const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
     await waitFor(() => expect(result.current.isInitializing).toBe(false));
 
-    act(() => {
-      result.current.logout();
+    await act(async () => {
+      await result.current.logout();
     });
 
     expect(result.current.user).toBeNull();
